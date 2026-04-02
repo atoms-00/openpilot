@@ -61,27 +61,43 @@ void can_send_thread(Panda *panda, bool fake_send) {
 
   AlignedBuffer aligned_buf;
   std::unique_ptr<Context> context(Context::create());
-  std::unique_ptr<SubSocket> subscriber(SubSocket::create(context.get(), "sendcan", "127.0.0.1", false, true, services.at("sendcan").queue_size));
-  assert(subscriber != NULL);
-  subscriber->setTimeout(100);
+  std::unique_ptr<SubSocket> sendcan_sub(SubSocket::create(context.get(), "sendcan", "127.0.0.1", false, true, services.at("sendcan").queue_size));
+  std::unique_ptr<SubSocket> bodycan_sub(SubSocket::create(context.get(), "bodycan", "127.0.0.1", false, true, services.at("bodycan").queue_size));
+  assert(sendcan_sub != NULL);
+  assert(bodycan_sub != NULL);
+
+  std::unique_ptr<Poller> poller(Poller::create({sendcan_sub.get(), bodycan_sub.get()}));
 
   // run as fast as messages come in
   while (!do_exit && check_connected(panda)) {
-    std::unique_ptr<Message> msg(subscriber->receive());
-    if (!msg) {
-      continue;
-    }
+    for (auto *sock : poller->poll(100)) {
+      std::unique_ptr<Message> msg(sock->receive(true));
+      if (!msg) continue;
 
-    capnp::FlatArrayMessageReader cmsg(aligned_buf.align(msg.get()));
-    cereal::Event::Reader event = cmsg.getRoot<cereal::Event>();
+      if (sock != sendcan_sub.get()) {
+        std::string cp_bytes = params.get("CarParams");
+        if (cp_bytes.size() > 0) {
+          AlignedBuffer aligned_buf;
+          capnp::FlatArrayMessageReader cmsg(aligned_buf.align(cp_bytes.data(), cp_bytes.size()));
+          cereal::CarParams::Reader CP = cmsg.getRoot<cereal::CarParams>();
+          if (CP.getNotCar()) continue;
+        }
+      }
 
-    // Don't send if older than 1 second
-    if ((nanos_since_boot() - event.getLogMonoTime() < 1e9) && !fake_send) {
-      LOGT("sending sendcan to panda: %s", (panda->hw_serial()).c_str());
-      panda->can_send(event.getSendcan());
-      LOGT("sendcan sent to panda: %s", (panda->hw_serial()).c_str());
-    } else {
-      LOGE("sendcan too old to send: %" PRIu64 ", %" PRIu64, nanos_since_boot(), event.getLogMonoTime());
+      capnp::FlatArrayMessageReader cmsg(aligned_buf.align(msg.get()));
+      cereal::Event::Reader event = cmsg.getRoot<cereal::Event>();
+
+      // Don't send if older than 1 second
+      if ((nanos_since_boot() - event.getLogMonoTime() < 1e9) && !fake_send) {
+        if (sock == bodycan_sub.get()) {
+          panda->can_send(event.getBodycan());
+        } else {
+          panda->can_send(event.getSendcan());
+        }
+        LOGT("sending can to panda: %s", (panda->hw_serial()).c_str());
+      } else {
+        LOGE("can msg too old to send: %" PRIu64 ", %" PRIu64, nanos_since_boot(), event.getLogMonoTime());
+      }
     }
   }
 }

@@ -2554,6 +2554,7 @@ struct Event {
     radarState @13 :RadarState;
     liveTracks @131 :Car.RadarData;
     sendcan @17 :List(CanData);
+    bodycan @152 :List(CanData);
     liveCalibration @19 :LiveCalibrationData;
     carState @22 :Car.CarState;
     carControl @23 :Car.CarControl;
