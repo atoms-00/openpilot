@@ -256,6 +256,7 @@ def cb(sm, item, tid, end_event: threading.Event, sz: int, cur: int) -> None:
   cur_upload_items[tid] = replace(item, progress=cur / sz if sz else 1)
 
 
+# @atoms CLD-020 — Data Upload
 def upload_handler(end_event: threading.Event) -> None:
   sm = messaging.SubMaster(['deviceState'])
   tid = threading.get_ident()
@@ -481,6 +482,7 @@ def setRouteViewed(route: str) -> dict[str, int | str]:
   return {"success": 1}
 
 
+# @atoms CLD-030 — Remote SSH
 def startLocalProxy(global_end_event: threading.Event, remote_ws_uri: str, local_port: int) -> dict[str, int]:
   try:
     # migration, can be removed once 0.9.8 is out for a while

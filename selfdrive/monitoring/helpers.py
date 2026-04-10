@@ -20,25 +20,32 @@ EventName = log.OnroadEvent.EventName
 #  We recommend that you do not change these numbers from the defaults.
 # ******************************************************************************************
 
+# @atoms FRK-010 — DMS Strictness Preservation
 class DRIVER_MONITOR_SETTINGS:
   def __init__(self, device_type):
     self._DT_DMON = DT_DMON
     # ref (page15-16): https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:42018X1947&rid=2
+    # @atoms DMS-022 — Hands-on-Wheel Torque Monitoring
     self._AWARENESS_TIME = 30. # passive wheeltouch total timeout
     self._AWARENESS_PRE_TIME_TILL_TERMINAL = 15.
     self._AWARENESS_PROMPT_TIME_TILL_TERMINAL = 6.
+    # @atoms DMS-033 — Repeated Escalation
     self._DISTRACTED_TIME = 11. # active monitoring total timeout
     self._DISTRACTED_PRE_TIME_TILL_TERMINAL = 8.
     self._DISTRACTED_PROMPT_TIME_TILL_TERMINAL = 6.
 
+    # @atoms DMS-011 — Face Detection
     self._FACE_THRESHOLD = 0.7
+    # @atoms DMS-012 — Eye State Classification
     self._EYE_THRESHOLD = 0.5
     self._BLINK_THRESHOLD = 0.5
     self._PHONE_THRESH = 0.5
 
+    # @atoms DMS-021 — Distraction Scoring
     self._POSE_PITCH_THRESHOLD = 0.3133
     self._POSE_PITCH_THRESHOLD_SLACK = 0.3237
     self._POSE_PITCH_THRESHOLD_STRICT = self._POSE_PITCH_THRESHOLD
+    # @atoms DMS-021 — Distraction Scoring
     self._POSE_YAW_THRESHOLD = 0.4020
     self._POSE_YAW_THRESHOLD_SLACK = 0.5042
     self._POSE_YAW_THRESHOLD_STRICT = self._POSE_YAW_THRESHOLD
@@ -76,6 +83,7 @@ class DRIVER_MONITOR_SETTINGS:
     self._RECOVERY_FACTOR_MAX = 5.  # relative to minus step change
     self._RECOVERY_FACTOR_MIN = 1.25  # relative to minus step change
 
+    # @atoms DMS-023 — Pre-Engage Attention Gate
     self._MAX_TERMINAL_ALERTS = 3  # not allowed to engage after 3 terminal alerts
     self._MAX_TERMINAL_DURATION = int(30 / self._DT_DMON)  # not allowed to engage after 30s of terminal alerts
 
@@ -116,6 +124,7 @@ EFL = 598.0 # focal length in K
 cam = DEVICE_CAMERAS[("tici", "ar0231")] # corrected image has same size as raw
 W, H = (cam.dcam.width, cam.dcam.height)  # corrected image has same size as raw
 
+# @atoms DMS-013 — Head Pose Estimation
 def face_orientation_from_net(angles_desc, pos_desc, rpy_calib):
   # the output of these angles are in device frame
   # so from driver's perspective, pitch is up and yaw is right
@@ -223,6 +232,7 @@ class DriverMonitoring:
                                            [self.settings._POSE_YAW_THRESHOLD_SLACK,
                                             self.settings._POSE_YAW_THRESHOLD_STRICT]) / self.settings._POSE_YAW_THRESHOLD
 
+  # @atoms DMS-021 — Distraction Scoring
   def _get_distracted_types(self):
     distracted_types = []
 
@@ -288,6 +298,7 @@ class DriverMonitoring:
     self.pose.yaw_std = driver_data.faceOrientationStd[1]
     model_std_max = max(self.pose.pitch_std, self.pose.yaw_std)
     self.pose.low_std = model_std_max < self.settings._POSESTD_THRESHOLD
+    # @atoms DMS-014 — Sunglasses Detection (sunglassesProb available in driver_data via cereal schema)
     self.blink_prob = driver_data.eyesClosedProb * (driver_data.eyesVisibleProb > self.settings._EYE_THRESHOLD)
     self.phone_prob = driver_data.phoneProb
 
@@ -326,6 +337,7 @@ class DriverMonitoring:
 
   def _update_events(self, driver_engaged, op_engaged, standstill, wrong_gear, car_speed):
     self._reset_events()
+    # @atoms DMS-034 — Automatic Deceleration
     # Block engaging until ignition cycle after max number or time of distractions
     if self.terminal_alert_cnt >= self.settings._MAX_TERMINAL_ALERTS or \
        self.terminal_time >= self.settings._MAX_TERMINAL_DURATION:

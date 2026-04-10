@@ -49,6 +49,7 @@ IMG_QUEUE_SHAPE = (6*(ModelConstants.MODEL_RUN_FREQ//ModelConstants.MODEL_CONTEX
 assert IMG_QUEUE_SHAPE[0] == 30
 
 
+# @atoms ALC-021 — Desired Curvature Output: computes desiredCurvature from plan orientation
 def get_action_from_model(model_output: dict[str, np.ndarray], prev_action: log.ModelDataV2.Action,
                           lat_action_t: float, long_action_t: float, v_ego: float) -> log.ModelDataV2.Action:
     plan = model_output['plan'][0]
@@ -139,6 +140,8 @@ class InputQueues:
           out[k] = self.q[k][:, idxs]
       return out
 
+# @atoms ALC-011 — Path Prediction
+# @atoms ALC-014 — Lead Vehicle Detection — Vision Only
 class ModelState:
   inputs: dict[str, np.ndarray]
   output: np.ndarray
@@ -194,6 +197,7 @@ class ModelState:
     parsed_model_outputs = {k: model_outputs[np.newaxis, v] for k,v in output_slices.items()}
     return parsed_model_outputs
 
+  # @atoms ALC-011 — Path Prediction: runs vision + policy inference at ~20 Hz, producing driving path/trajectory
   def run(self, bufs: dict[str, VisionBuf], transforms: dict[str, np.ndarray],
                 inputs: dict[str, np.ndarray], prepare_only: bool) -> dict[str, np.ndarray] | None:
     # Model decides when action is completed, so desire input is just a pulse triggered on rising edge

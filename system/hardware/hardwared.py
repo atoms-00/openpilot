@@ -163,6 +163,7 @@ def hw_state_thread(end_event, hw_queue):
     time.sleep(DT_HW)
 
 
+# @atoms SYS-041 — Thermal Management
 def hardware_thread(end_event, hw_queue) -> None:
   pm = messaging.PubMaster(['deviceState'])
   sm = messaging.SubMaster(["peripheralState", "gpsLocationExternal", "selfdriveState", "pandaStates"], poll="pandaStates")
@@ -317,6 +318,7 @@ def hardware_thread(end_event, hw_queue) -> None:
     # ensure device is fully booted
     startup_conditions["device_booted"] = startup_conditions.get("device_booted", False) or HARDWARE.booted()
 
+    # @atoms SYS-042 — Thermal Shutdown
     # if the temperature enters the danger zone, go offroad to cool down
     onroad_conditions["device_temp_good"] = thermal_status < ThermalStatus.danger
     extra_text = f"{offroad_comp_temp:.1f}C"

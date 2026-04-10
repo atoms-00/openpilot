@@ -19,6 +19,7 @@ class LatControl(ABC):
   def reset(self):
     self.sat_time = 0.
 
+  # @atoms ALC-040 — Steering Arc Saturation Warning
   def _check_saturation(self, saturated, CS, steer_limited_by_safety, curvature_limited):
     # Saturated only if control output is not being limited by car torque/angle rate limits
     if (saturated or curvature_limited) and CS.vEgo > self.sat_check_min_speed and not steer_limited_by_safety and not CS.steeringPressed:

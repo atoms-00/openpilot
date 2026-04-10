@@ -72,6 +72,7 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
   driving_model_data.frameDropPerc = frame_drop_perc
   driving_model_data.modelExecutionTime = model_execution_time
 
+  # @atoms ALC-021 — Desired Curvature Output: action includes desiredCurvature for lateral control
   driving_model_data.action = action
 
   modelV2 = extended_msg.modelV2
@@ -82,7 +83,7 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
   modelV2.timestampEof = timestamp_eof
   modelV2.modelExecutionTime = model_execution_time
 
-  # plan
+  # @atoms ALC-011 — Path Prediction: plan position, velocity, acceleration, orientation filled into message
   fill_xyzt(modelV2.position, ModelConstants.T_IDXS, *net_output_data['plan'][0,:,Plan.POSITION].T, *net_output_data['plan_stds'][0,:,Plan.POSITION].T)
   fill_xyzt(modelV2.velocity, ModelConstants.T_IDXS, *net_output_data['plan'][0,:,Plan.VELOCITY].T)
   fill_xyzt(modelV2.acceleration, ModelConstants.T_IDXS, *net_output_data['plan'][0,:,Plan.ACCELERATION].T)
@@ -98,7 +99,7 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
   # times at X_IDXS of edges and lines aren't used
   LINE_T_IDXS: list[float] = []
 
-  # lane lines
+  # @atoms ALC-012 — Lane Line Detection
   modelV2.init('laneLines', 4)
   for i in range(4):
     lane_line = modelV2.laneLines[i]
@@ -108,14 +109,14 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
 
   fill_lane_line_meta(driving_model_data.laneLineMeta, modelV2.laneLines, modelV2.laneLineProbs)
 
-  # road edges
+  # @atoms ALC-013 — Road Edge Detection
   modelV2.init('roadEdges', 2)
   for i in range(2):
     road_edge = modelV2.roadEdges[i]
     fill_xyzt(road_edge, LINE_T_IDXS, np.array(ModelConstants.X_IDXS), net_output_data['road_edges'][0,i,:,0], net_output_data['road_edges'][0,i,:,1])
   modelV2.roadEdgeStds = net_output_data['road_edges_stds'][0,:,0,0].tolist()
 
-  # leads
+  # @atoms ALC-014 — Lead Vehicle Detection — Vision Only
   modelV2.init('leadsV3', 3)
   for i in range(3):
     lead = modelV2.leadsV3[i]
@@ -123,7 +124,7 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
     lead.prob = net_output_data['lead_prob'][0,i].tolist()
     lead.probTime = ModelConstants.LEAD_T_OFFSETS[i]
 
-  # meta
+  # @atoms ALC-015 — Scene Confidence Score: meta and confidence data filled into message
   meta = modelV2.meta
   meta.desireState = net_output_data['desire_state'][0].reshape(-1).tolist()
   meta.desirePrediction = net_output_data['desire_pred'][0].reshape(-1).tolist()
@@ -148,7 +149,7 @@ def fill_model_msg(base_msg: capnp._DynamicStructBuilder, extended_msg: capnp._D
     (publish_state.prev_brake_3ms2_probs > ModelConstants.FCW_THRESHOLDS_3MS2).all()
   meta.hardBrakePredicted = hard_brake_predicted.item()
 
-  # confidence
+  # @atoms ALC-015 — Scene Confidence Score: confidence classification (green/yellow/red)
   if vipc_frame_id % (2*ModelConstants.MODEL_RUN_FREQ) == 0:
     # any disengage prob
     brake_disengage_probs = net_output_data['meta'][0,Meta.BRAKE_DISENGAGE]

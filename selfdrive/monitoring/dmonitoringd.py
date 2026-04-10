@@ -5,6 +5,7 @@ from openpilot.common.realtime import config_realtime_process
 from openpilot.selfdrive.monitoring.helpers import DriverMonitoring
 
 
+# @atoms DMS-010 — Driver Perception (daemon entry point for DMS-011 through DMS-014)
 def dmonitoringd_thread():
   config_realtime_process([0, 1, 2, 3], 5)
 

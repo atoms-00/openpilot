@@ -104,6 +104,7 @@ def manager_cleanup() -> None:
   cloudlog.info("everything is dead")
 
 
+# @atoms SYS-011 — Process Manager
 def manager_thread() -> None:
   cloudlog.bind(daemon="manager")
   cloudlog.info("manager start")

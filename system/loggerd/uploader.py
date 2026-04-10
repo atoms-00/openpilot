@@ -73,6 +73,7 @@ def clear_locks(root: str) -> None:
       cloudlog.exception("clear_locks failed")
 
 
+# @atoms CLD-020 — Data Upload
 class Uploader:
   def __init__(self, dongle_id: str, root: str):
     self.dongle_id = dongle_id

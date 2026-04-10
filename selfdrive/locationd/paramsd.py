@@ -24,6 +24,7 @@ MIN_ACTIVE_SPEED = 1.0
 LOW_ACTIVE_SPEED = 10.0
 
 
+# @atoms SYS-032 — Live Parameter Learning
 class VehicleParamsLearner:
   def __init__(self, CP: car.CarParams, steer_ratio: float, stiffness_factor: float, angle_offset: float, P_initial: np.ndarray | None = None):
     self.kf = CarKalman(GENERATED_DIR)

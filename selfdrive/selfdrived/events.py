@@ -22,6 +22,7 @@ AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 EventName = log.OnroadEvent.EventName
 
 
+# @atoms UI-021 — Alert Severity Colors (priority levels drive alert color mapping)
 # Alert priorities
 class Priority(IntEnum):
   LOWEST = 0
@@ -109,6 +110,7 @@ class Events:
     return ret
 
 
+# @atoms UI-021 — Alert Severity Colors (alert_status and priority determine visual severity)
 class Alert:
   def __init__(self,
                alert_text_1: str,
@@ -486,6 +488,8 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
     ET.NO_ENTRY: NoEntryAlert("Stock LKAS: Lane Departure Detected"),
   },
 
+  # @atoms FCW-011 — FCW Visual Alert (red full-screen "BRAKE!" flash)
+  # @atoms FCW-012 — FCW Audible Alert (warningSoft chime accompanies visual)
   EventName.fcw: {
     ET.PERMANENT: Alert(
       "BRAKE!",
@@ -512,6 +516,7 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.prompt, 1.8),
   },
 
+  # @atoms DMS-031 — Visual Warning (green "Pay Attention" pre-alert)
   EventName.driverDistracted1: {
     ET.PERMANENT: Alert(
       "Pay Attention",
@@ -520,6 +525,7 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1),
   },
 
+  # @atoms DMS-032 — Audible Warning (orange "Driver Distracted" with chime)
   EventName.driverDistracted2: {
     ET.PERMANENT: Alert(
       "Pay Attention",
@@ -528,6 +534,7 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.promptDistracted, .1),
   },
 
+  # @atoms DMS-033 — Repeated Escalation (red "DISENGAGE IMMEDIATELY" final alert)
   EventName.driverDistracted3: {
     ET.PERMANENT: Alert(
       "DISENGAGE IMMEDIATELY",
@@ -826,11 +833,13 @@ EVENTS: dict[int, dict[str, Alert | AlertCallbackType]] = {
     ET.NO_ENTRY: NoEntryAlert("Remount Detected: Recalibrating"),
   },
 
+  # @atoms SAF-016 — Door Open Interlock
   EventName.doorOpen: {
     ET.SOFT_DISABLE: user_soft_disable_alert("Door Open"),
     ET.NO_ENTRY: NoEntryAlert("Door Open"),
   },
 
+  # @atoms SAF-015 — Seatbelt Interlock
   EventName.seatbeltNotLatched: {
     ET.SOFT_DISABLE: user_soft_disable_alert("Seatbelt Unlatched"),
     ET.NO_ENTRY: NoEntryAlert("Seatbelt Unlatched"),

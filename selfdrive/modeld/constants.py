@@ -34,21 +34,31 @@ class ModelConstants:
   DISENGAGE_WIDTH = 5
   POSE_WIDTH = 6
   WIDE_FROM_DEVICE_WIDTH = 3
+  # @atoms ALC-014 — Lead Vehicle Detection — Vision Only
   LEAD_WIDTH = 4
+  # @atoms ALC-012 — Lane Line Detection
   LANE_LINES_WIDTH = 2
+  # @atoms ALC-013 — Road Edge Detection
   ROAD_EDGES_WIDTH = 2
+  # @atoms ALC-011 — Path Prediction
   PLAN_WIDTH = 15
   DESIRE_PRED_WIDTH = 8
   LAT_PLANNER_SOLUTION_WIDTH = 4
+  # @atoms ALC-021 — Desired Curvature Output
   DESIRED_CURV_WIDTH = 1
 
+  # @atoms ALC-012 — Lane Line Detection
   NUM_LANE_LINES = 4
+  # @atoms ALC-013 — Road Edge Detection
   NUM_ROAD_EDGES = 2
 
+  # @atoms ALC-014 — Lead Vehicle Detection — Vision Only
   LEAD_TRAJ_LEN = 6
   DESIRE_PRED_LEN = 4
 
+  # @atoms ALC-011 — Path Prediction
   PLAN_MHP_N = 5
+  # @atoms ALC-014 — Lead Vehicle Detection — Vision Only
   LEAD_MHP_N = 2
   PLAN_MHP_SELECTION = 1
   LEAD_MHP_SELECTION = 3
@@ -57,13 +67,14 @@ class ModelConstants:
   FCW_THRESHOLD_5MS2_LOW = 0.05
   FCW_THRESHOLD_3MS2 = 0.7
 
+  # @atoms ALC-015 — Scene Confidence Score
   CONFIDENCE_BUFFER_LEN = 5
   RYG_GREEN = 0.01165
   RYG_YELLOW = 0.06157
 
   POLY_PATH_DEGREE = 4
 
-# model outputs slices
+# @atoms ALC-011 — Path Prediction: model output slice indices for plan trajectory
 class Plan:
   POSITION = slice(0, 3)
   VELOCITY = slice(3, 6)
@@ -71,6 +82,7 @@ class Plan:
   T_FROM_CURRENT_EULER = slice(9, 12)
   ORIENTATION_RATE = slice(12, 15)
 
+# @atoms ALC-015 — Scene Confidence Score: meta output slice indices for disengage/confidence
 class Meta:
   ENGAGED = slice(0, 1)
   # next 2, 4, 6, 8, 10 seconds

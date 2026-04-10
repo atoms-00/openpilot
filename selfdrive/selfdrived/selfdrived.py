@@ -186,6 +186,8 @@ class SelfdriveD:
       self.events.add_from_msg(self.sm['driverMonitoringState'].events)
 
     # Add car events, ignore if CAN isn't valid
+    # @atoms SAF-015 — Seatbelt Interlock (seatbeltNotLatched event originates from car_events)
+    # @atoms SAF-016 — Door Open Interlock (doorOpen event originates from car_events)
     if CS.canValid:
       car_events = self.car_events.update(CS, self.CS_prev, self.sm['carControl']).to_msg()
       self.events.add_from_msg(car_events)
@@ -232,6 +234,8 @@ class SelfdriveD:
       else:
         self.events.add(EventName.calibrationInvalid)
 
+    # @atoms LDW-010 — Lane Departure Detection
+    # @atoms LDW-011 — LDW Turn Signal Suppression (suppression logic handled upstream in driverAssistance)
     # Lane departure warning
     if self.is_ldw_enabled and self.sm.valid['driverAssistance']:
       if self.sm['driverAssistance'].leftLaneDeparture or self.sm['driverAssistance'].rightLaneDeparture:
@@ -298,6 +302,7 @@ class SelfdriveD:
       if not_running != self.not_running_prev:
         cloudlog.event("process_not_running", not_running=not_running, error=True)
       self.not_running_prev = not_running
+    # @atoms SYS-012 — Critical Process Watchdog
     if self.sm.recv_frame['managerState'] and not_running:
       self.events.add(EventName.processNotRunning)
     else:

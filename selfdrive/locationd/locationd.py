@@ -51,6 +51,7 @@ class HandleLogResult(Enum):
   SENSOR_SOURCE_INVALID = 3
 
 
+# @atoms SYS-031 — Position and Orientation
 class LocationEstimator:
   def __init__(self, debug: bool):
     self.kf = PoseKalman(GENERATED_DIR, MAX_FILTER_REWIND_TIME)

@@ -62,6 +62,7 @@ def check_selfdrive_timeout_alert(sm):
   return False
 
 
+# @atoms UI-022 — Audio Alerts
 class Soundd:
   def __init__(self):
     self.load_sounds()

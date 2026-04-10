@@ -217,6 +217,7 @@ void handle_preserve_segment(LoggerdState *s) {
   prev_segment = s->logger.segment();
 }
 
+// @atoms SYS-051 — Data Logging
 void loggerd_thread() {
   // setup messaging
   struct ServiceState {

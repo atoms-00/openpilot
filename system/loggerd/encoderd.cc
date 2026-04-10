@@ -45,6 +45,7 @@ bool sync_encoders(EncoderdState *s, VisionStreamType cam_type, uint32_t frame_i
 }
 
 
+// @atoms SYS-052 — Video Encoding
 void encoder_thread(EncoderdState *s, const LogCameraInfo &cam_info) {
   util::set_thread_name(cam_info.thread_name);
 

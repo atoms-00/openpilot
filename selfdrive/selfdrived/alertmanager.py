@@ -50,6 +50,7 @@ class AlertManager:
       entry.end_frame = max(frame + 1, min_end_frame)
       entry.added_frame = frame
 
+  # @atoms UI-021 — Alert Severity Colors (selects highest-priority alert for display)
   def process_alerts(self, frame: int, clear_event_types: set):
     ae = AlertEntry()
     for v in self.alerts.values():
