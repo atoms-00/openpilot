@@ -11,9 +11,11 @@ from openpilot.system.ui.widgets.scroller import Scroller
 from openpilot.system.ui.lib.application import gui_app
 
 
+# @atoms REQ-209 — Onroad Auto-Scroll Delay
 ONROAD_DELAY = 2.5  # seconds
 
 
+# @atoms REQ-193 — Mici Main Layout
 class MiciMainLayout(Scroller):
   def __init__(self):
     super().__init__(snap_items=True, spacing=0, pad=0, scroll_indicator=False, edge_shadows=False)
@@ -44,6 +46,7 @@ class MiciMainLayout(Scroller):
     self._scroller.set_reset_scroll_at_show(False)
 
     # Disable scrolling when onroad is interacting with bookmark
+    # @atoms REQ-215 — Onroad Swipe Scroll Gate
     self._scroller.set_scrolling_enabled(lambda: not self._onroad_layout.is_swiping_left())
 
     # Set callbacks
@@ -53,6 +56,7 @@ class MiciMainLayout(Scroller):
     gui_app.push_widget(self)
 
     # Start onboarding if terms or training not completed, make sure to push after self
+    # @atoms REQ-213 — Onboarding Gate Push
     self._onboarding_window = OnboardingWindow(lambda: gui_app.pop_widgets_to(self))
     if not self._onboarding_window.completed:
       gui_app.push_widget(self._onboarding_window)
@@ -67,6 +71,7 @@ class MiciMainLayout(Scroller):
     self._scroller.scroll_to(layout_x, smooth=True)
 
   def _render(self, _):
+    # @atoms REQ-212 — First-Render Alerts Navigation Priority
     if not self._setup:
       if self._alerts_layout.active_alerts() > 0:
         self._scroller.scroll_to(self._alerts_layout.rect.x)
@@ -87,6 +92,7 @@ class MiciMainLayout(Scroller):
 
       # onroad: after delay, pop nav stack and scroll to onroad
       # offroad: immediately scroll to home, but don't pop nav stack (can stay in settings)
+      # @atoms REQ-210 — Offroad Immediate Scroll
       if ui_state.started:
         self._onroad_time_delay = rl.get_time()
       else:
@@ -98,6 +104,7 @@ class MiciMainLayout(Scroller):
       self._onroad_time_delay = None
 
     # When car leaves standstill, pop nav stack and scroll to onroad
+    # @atoms REQ-211 — Standstill Exit Onroad Scroll
     CS = ui_state.sm["carState"]
     if not CS.standstill and self._prev_standstill:
       gui_app.pop_widgets_to(self, lambda: self._scroll_to(self._onroad_layout))
@@ -117,6 +124,7 @@ class MiciMainLayout(Scroller):
       gui_app.pop_widgets_to(self, instant=True)
       self._scroll_to(self._home_layout)
 
+  # @atoms REQ-214 — Bookmark Button Message Publication
   def _on_bookmark_clicked(self):
     user_bookmark = messaging.new_message('bookmarkButton')
     user_bookmark.valid = True

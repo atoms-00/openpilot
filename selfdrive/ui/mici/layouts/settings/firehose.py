@@ -35,12 +35,15 @@ FAQ_ITEMS = [
 ]
 
 
+# @atoms REQ-201 — Firehose Settings Layout
 class FirehoseLayoutBase(Widget):
   PARAM_KEY = "ApiCache_FirehoseStats"
+  # @atoms REQ-258 — Firehose Status Display
   GREEN = rl.Color(46, 204, 113, 255)
   RED = rl.Color(231, 76, 60, 255)
   GRAY = rl.Color(68, 68, 68, 255)
   LIGHT_GRAY = rl.Color(228, 228, 228, 255)
+  # @atoms REQ-260 — Firehose API Polling
   UPDATE_INTERVAL = 30  # seconds
 
   def __init__(self):
@@ -56,6 +59,7 @@ class FirehoseLayoutBase(Widget):
     self._update_thread = threading.Thread(target=self._update_loop, daemon=True)
     self._update_thread.start()
 
+  # @atoms REQ-262 — Firehose Polling Thread Shutdown
   def __del__(self):
     self._running = False
     try:
@@ -109,6 +113,7 @@ class FirehoseLayoutBase(Widget):
     y += 20
 
     # Contribution count (if available)
+    # @atoms REQ-259 — Firehose Contribution Count Display
     if self._segment_count > 0:
       contrib_text = trn("{} segment of your driving is in the training dataset so far.",
                          "{} segments of your driving is in the training dataset so far.", self._segment_count).format(self._segment_count)
@@ -211,6 +216,7 @@ class FirehoseLayoutBase(Widget):
     except Exception as e:
       cloudlog.error(f"Failed to fetch firehose stats: {e}")
 
+  # @atoms REQ-261 — Firehose API Polling Gates
   def _update_loop(self):
     while self._running:
       if not ui_state.started and device._awake:

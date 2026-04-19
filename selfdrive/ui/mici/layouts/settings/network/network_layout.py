@@ -9,6 +9,7 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.lib.wifi_manager import WifiManager, Network, MeteredType
 
 
+# @atoms REQ-202 — Network Settings Layout
 class NetworkLayoutMici(NavScroller):
   def __init__(self):
     super().__init__()
@@ -28,8 +29,10 @@ class NetworkLayoutMici(NavScroller):
       self._network_metered_btn.set_enabled(False)
       self._wifi_manager.set_tethering_active(checked)
 
+    # @atoms REQ-263 — Network Tethering Toggle
     self._tethering_toggle_btn = BigToggle("enable tethering", "", toggle_callback=tethering_toggle_callback)
 
+    # @atoms REQ-264 — Network Tethering Password Minimum Length
     def tethering_password_callback(password: str):
       if password:
         self._tethering_toggle_btn.set_enabled(False)
@@ -58,6 +61,7 @@ class NetworkLayoutMici(NavScroller):
 
     # TODO: signal for current network metered type when changing networks, this is wrong until you press it once
     # TODO: disable when not connected
+    # @atoms REQ-265 — Network Metered Multi-Toggle
     self._network_metered_btn = BigMultiToggle("network usage", ["default", "metered", "unmetered"], select_callback=network_metered_callback)
     self._network_metered_btn.set_enabled(False)
 
@@ -97,12 +101,15 @@ class NetworkLayoutMici(NavScroller):
     super()._update_state()
 
     # If not using prime SIM, show GSM settings and enable IPv4 forwarding
+    # @atoms REQ-267 — Network GSM Prime Gate
     show_cell_settings = ui_state.prime_state.get_type() in (PrimeType.NONE, PrimeType.LITE)
+    # @atoms REQ-268 — Network IPv4 Forwarding Enable
     self._wifi_manager.set_ipv4_forward(show_cell_settings)
     self._roaming_btn.set_visible(show_cell_settings)
     self._apn_btn.set_visible(show_cell_settings)
     self._cellular_metered_btn.set_visible(show_cell_settings)
 
+  # @atoms REQ-269 — Network WifiManager Activation Lifecycle
   def show_event(self):
     super().show_event()
     self._wifi_manager.set_active(True)
@@ -142,6 +149,7 @@ class NetworkLayoutMici(NavScroller):
     # TODO: use real signals (like activated/settings changed, etc.) to speed up re-enabling buttons
     self._tethering_toggle_btn.set_enabled(True)
     self._tethering_password_btn.set_enabled(True)
+    # @atoms REQ-266 — Network Metered Toggle Gating
     self._network_metered_btn.set_enabled(lambda: not tethering_active and bool(self._wifi_manager.ipv4_address))
     self._tethering_toggle_btn.set_checked(tethering_active)
 

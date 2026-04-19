@@ -9,17 +9,24 @@ from openpilot.selfdrive.ui.ui_state import ui_state
 PERSONALITY_TO_INT = log.LongitudinalPersonality.schema.enumerants
 
 
+# @atoms REQ-198 — Settings Toggles Layout
 class TogglesLayoutMici(NavScroller):
   def __init__(self):
     super().__init__()
 
+    # @atoms REQ-231 — Driving Personality Toggle
     self._personality_toggle = BigMultiParamToggle("driving personality", "LongitudinalPersonality", ["aggressive", "standard", "relaxed"])
+    # @atoms REQ-232 — Experimental Mode Longitudinal Gate
     self._experimental_btn = BigParamControl("experimental mode", "ExperimentalMode")
     is_metric_toggle = BigParamControl("use metric units", "IsMetric")
     ldw_toggle = BigParamControl("lane departure warnings", "IsLdwEnabled")
     always_on_dm_toggle = BigParamControl("always-on driver monitor", "AlwaysOnDM")
+    # @atoms REQ-236 — Recording Toggle Restart-Required Callback
+    # @atoms REQ-234 — Record Front Engagement Gate
     record_front = BigParamControl("record & upload driver camera", "RecordFront", toggle_callback=restart_needed_callback)
+    # @atoms REQ-235 — Record Audio Engagement Gate
     record_mic = BigParamControl("record & upload mic audio", "RecordAudio", toggle_callback=restart_needed_callback)
+    # @atoms REQ-233 — Enable Openpilot Toggle Engagement Gate
     enable_openpilot = BigParamControl("enable openpilot", "OpenpilotEnabledToggle", toggle_callback=restart_needed_callback)
 
     self._scroller.add_widgets([
@@ -63,6 +70,7 @@ class TogglesLayoutMici(NavScroller):
         self._personality_toggle.set_value(self._personality_toggle._options[personality])
       ui_state.personality = personality
 
+  # @atoms REQ-237 — Toggles External Param Refresh
   def show_event(self):
     super().show_event()
     self._update_toggles()

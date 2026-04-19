@@ -12,6 +12,7 @@ from openpilot.system.ui.widgets.scroller import Scroller
 from openpilot.system.ui.lib.application import gui_app, FontWeight
 from openpilot.system.ui.lib.multilang import tr
 
+# @atoms REQ-221 — Offroad Alerts Refresh Cycle
 REFRESH_INTERVAL = 5.0  # seconds
 
 
@@ -29,6 +30,7 @@ class AlertData:
   visible: bool = False
 
 
+# @atoms REQ-217 — Offroad Alert Height Tier Selection
 class AlertItem(Widget):
   # TODO: click should always go somewhere: home or specific settings pane
   """Individual alert item widget with background image and text."""
@@ -73,6 +75,7 @@ class AlertItem(Widget):
 
     self._update_content()
 
+  # @atoms REQ-216 — Offroad Alert Title/Body Split
   def _split_text(self, text: str) -> tuple[str, str]:
     """Split text into title (first sentence) and body (remaining text)."""
     # Find the end of the first sentence (period, exclamation, or question mark followed by space or end)
@@ -88,6 +91,7 @@ class AlertItem(Widget):
 
   def _update_content(self):
     """Update text and calculate height."""
+    # @atoms REQ-219 — Offroad Alert Visibility Control
     if not self.alert_data.visible or not self.alert_data.text:
       self.set_visible(False)
       return
@@ -175,6 +179,7 @@ class AlertItem(Widget):
 
     # Draw warning icon on the right side
     # Use green icon for update alerts (severity = -1), red for high severity, orange for low severity
+    # @atoms REQ-218 — Offroad Alert Severity Icon Palette
     if self.alert_data.severity == -1:
       icon_texture = self._icon_green
     elif self.alert_data.severity > 0:
@@ -186,6 +191,7 @@ class AlertItem(Widget):
     rl.draw_texture_ex(icon_texture, rl.Vector2(icon_x, icon_y), 0.0, 1.0, rl.WHITE)
 
 
+# @atoms REQ-195 — Mici Offroad Alerts Layout
 class MiciOffroadAlerts(Scroller):
   """Offroad alerts layout with vertical scrolling."""
 
@@ -198,6 +204,7 @@ class MiciOffroadAlerts(Scroller):
     self._last_refresh = 0.0
 
     # Create empty state label
+    # @atoms REQ-222 — Empty Offroad Alerts Label
     self._empty_label = UnifiedLabel(tr("no alerts"), 65, FontWeight.DISPLAY, rl.WHITE,
                                      alignment=rl.GuiTextAlignment.TEXT_ALIGN_CENTER,
                                      alignment_vertical=rl.GuiTextAlignmentVertical.TEXT_ALIGN_MIDDLE)
@@ -239,6 +246,7 @@ class MiciOffroadAlerts(Scroller):
     active_count = 0
 
     # Handle UpdateAvailable alert specially
+    # @atoms REQ-220 — UpdateAvailable Alert Dynamic Content and Action
     update_available = self.params.get_bool("UpdateAvailable")
     update_alert_data = next((alert_data for alert_data in self.sorted_alerts if alert_data.key == "UpdateAvailable"), None)
 

@@ -43,6 +43,7 @@ class ReviewTrainingGuide(TrainingGuide):
     ui_state.params.put_bool_nonblocking("IsDriverViewEnabled", False)
 
 
+# @atoms REQ-246 — Device FCC Regulatory Modal
 class MiciFccModal(NavRawScrollPanel):
   def __init__(self, file_path: str | None = None, text: str | None = None):
     super().__init__()
@@ -77,6 +78,7 @@ def _engaged_confirmation_click(callback: Callable, action_text: str, icon: rl.T
     gui_app.push_widget(BigDialog("", f"Disengage to {action_text}"))
 
 
+# @atoms REQ-238 — Device Destructive Action Engagement Confirmation
 class EngagedConfirmationCircleButton(BigCircleButton):
   def __init__(self, title: str, icon: rl.Texture, callback: Callable[[], None], exit_on_confirm: bool = True,
                red: bool = False, icon_offset: tuple[int, int] = (0, 0)):
@@ -122,12 +124,14 @@ class DeviceInfoLayoutMici(Widget):
     self._serial_number_text_label.render()
 
 
+# @atoms REQ-240 — Device Updater State Machine
 class UpdaterState(IntEnum):
   IDLE = 0
   WAITING_FOR_UPDATER = 1
   UPDATER_RESPONDING = 2
 
 
+# @atoms REQ-239 — Device Pair Time Validity Gate
 class PairBigButton(BigButton):
   def __init__(self):
     super().__init__("pair", "connect.comma.ai", gui_app.texture("icons_mici/settings/comma_icon.png", 33, 60))
@@ -164,6 +168,7 @@ class PairBigButton(BigButton):
     gui_app.push_widget(dlg)
 
 
+# @atoms REQ-241 — Device Updater Response Timeout
 UPDATER_TIMEOUT = 10.0  # seconds to wait for updater to respond
 
 
@@ -285,18 +290,21 @@ class UpdateOpenpilotBigButton(BigButton):
       self._waiting_for_updater_t = None
 
 
+# @atoms REQ-199 — Device Settings Layout
 class DeviceLayoutMici(NavScroller):
   def __init__(self):
     super().__init__()
 
     self._fcc_dialog: HtmlModal | None = None
 
+    # @atoms REQ-244 — Device Reboot/Shutdown/Uninstall Param Triggers
     def power_off_callback():
       ui_state.params.put_bool("DoShutdown", True)
 
     def reboot_callback():
       ui_state.params.put_bool("DoReboot", True)
 
+    # @atoms REQ-243 — Device Reset Calibration Action
     def reset_calibration_callback():
       params = ui_state.params
       params.remove("CalibrationParams")
@@ -321,11 +329,13 @@ class DeviceLayoutMici(NavScroller):
 
     self._power_off_btn = EngagedConfirmationCircleButton("power off", gui_app.texture("icons_mici/settings/device/power.png", 64, 66),
                                                           power_off_callback, exit_on_confirm=False, red=True)
+    # @atoms REQ-242 — Device Power Off Ignition Visibility
     self._power_off_btn.set_visible(lambda: not ui_state.ignition)
 
     regulatory_btn = BigButton("regulatory info", "", gui_app.texture("icons_mici/settings/device/info.png", 64, 64))
     regulatory_btn.set_click_callback(self._on_regulatory)
 
+    # @atoms REQ-245 — Device Driver Camera Preview Offroad Gate
     driver_cam_btn = BigButton("driver\ncamera preview", "", gui_app.texture("icons_mici/settings/device/cameras.png", 64, 64))
     driver_cam_btn.set_click_callback(lambda: gui_app.push_widget(DriverCameraDialog()))
     driver_cam_btn.set_enabled(lambda: ui_state.is_offroad())

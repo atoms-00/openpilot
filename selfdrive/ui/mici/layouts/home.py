@@ -80,6 +80,7 @@ class NetworkIcon(Widget):
     rl.draw_texture_ex(draw_net_txt, rl.Vector2(draw_x, draw_y), 0.0, 1.0, rl.Color(255, 255, 255, int(255 * 0.9)))
 
 
+# @atoms REQ-194 — Mici Home Layout
 class MiciHomeLayout(Widget):
   def __init__(self):
     super().__init__()
@@ -126,6 +127,7 @@ class MiciHomeLayout(Widget):
       self._did_long_press = False
     self._is_pressed_prev = self.is_pressed
 
+    # @atoms REQ-205 — Home Long-Press Experimental Mode Toggle
     if self._mouse_down_t is not None:
       if time.monotonic() - self._mouse_down_t > 0.5:
         # long gating for experimental mode - only allow toggle if longitudinal control is available
@@ -135,6 +137,7 @@ class MiciHomeLayout(Widget):
         self._mouse_down_t = None
         self._did_long_press = True
 
+    # @atoms REQ-207 — Home Version Banner Refresh
     if rl.get_time() - self._last_refresh > 5.0:
       # Update version text
       self._version_text = self._get_version_text()
@@ -144,6 +147,7 @@ class MiciHomeLayout(Widget):
   def set_callbacks(self, on_settings: Callable | None = None):
     self._on_settings_click = on_settings
 
+  # @atoms REQ-206 — Home Short-Click Settings Navigation
   def _handle_mouse_release(self, mouse_pos: MousePos):
     if not self._did_long_press:
       if self._on_settings_click:
@@ -176,6 +180,7 @@ class MiciHomeLayout(Widget):
 
     if self._version_text is not None:
       # release branch
+      # @atoms REQ-208 — Home Release Branch Label Substitution
       release_branch = self._version_text[1] in RELEASE_BRANCHES
       version_pos = rl.Rectangle(text_pos.x, text_pos.y + self._openpilot_label.font_size + 16, 100, 44)
       self._version_label.set_text(self._version_text[0])
@@ -198,7 +203,9 @@ class MiciHomeLayout(Widget):
         self._version_commit_label.render()
 
     # ***** Center-aligned bottom section icons *****
+    # @atoms REQ-203 — Home ExperimentalMode Indicator
     self._experimental_icon.set_visible(self._experimental_mode)
+    # @atoms REQ-204 — Home Microphone Indicator
     self._mic_icon.set_visible(ui_state.recording_audio)
 
     footer_rect = rl.Rectangle(self.rect.x + HOME_PADDING, self.rect.y + self.rect.height - 48, self.rect.width - HOME_PADDING, 48)

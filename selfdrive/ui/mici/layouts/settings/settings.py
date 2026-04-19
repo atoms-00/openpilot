@@ -14,11 +14,13 @@ class SettingsBigButton(BigButton):
     return 64
 
 
+# @atoms REQ-197 — Settings Menu Layout
 class SettingsLayout(NavScroller):
   def __init__(self):
     super().__init__()
     self._params = Params()
 
+    # @atoms REQ-230 — Settings Menu Navigation Targets
     toggles_panel = TogglesLayoutMici()
     toggles_btn = SettingsBigButton("toggles", "", gui_app.texture("icons_mici/settings.png", 64, 64))
     toggles_btn.set_click_callback(lambda: gui_app.push_widget(toggles_panel))

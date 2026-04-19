@@ -87,6 +87,7 @@ class DMBadFaceDetected(NavScroller):
     ])
 
 
+# @atoms REQ-226 — Onboarding DM Tutorial Face Gate
 class TrainingGuideDMTutorial(NavWidget):
   PROGRESS_DURATION = 4
   LOOKING_THRESHOLD_DEG = 30.0
@@ -212,6 +213,7 @@ class TrainingGuideDMTutorial(NavWidget):
     rl.end_scissor_mode()
 
 
+# @atoms REQ-228 — Onboarding Record Front Opt-In
 class TrainingGuideRecordFront(NavScroller):
   def __init__(self, continue_callback: Callable[[], None]):
     super().__init__()
@@ -337,6 +339,7 @@ class TermsPage(Scroller):
     super()._render(_)
 
 
+# @atoms REQ-196 — Mici Onboarding Flow
 class OnboardingWindow(Widget):
   def __init__(self, completed_callback: Callable[[], None]):
     super().__init__()
@@ -352,9 +355,11 @@ class OnboardingWindow(Widget):
     self._training_guide = TrainingGuide(completed_callback=self._on_completed_training)
     self._training_guide.set_enabled(lambda: self.enabled)  # for nav stack
 
+  # @atoms REQ-229 — Onboarding Terms Decline Uninstall
   def _on_uninstall(self):
     ui_state.params.put_bool("DoUninstall", True)
 
+  # @atoms REQ-227 — Onboarding Interactive Timeout Override
   def show_event(self):
     super().show_event()
     device.set_override_interactive_timeout(300)
@@ -366,6 +371,7 @@ class OnboardingWindow(Widget):
     device.set_override_interactive_timeout(None)
     device.set_offroad_brightness(None)
 
+  # @atoms REQ-223 — Onboarding Completion Gate
   @property
   def completed(self) -> bool:
     return self._accepted_terms and self._training_done
@@ -374,10 +380,12 @@ class OnboardingWindow(Widget):
     ui_state.params.put_bool_nonblocking("IsDriverViewEnabled", False)
     self._completed_callback()
 
+  # @atoms REQ-224 — Onboarding Terms Acceptance Write
   def _on_terms_accepted(self):
     ui_state.params.put("HasAcceptedTerms", terms_version)
     gui_app.push_widget(self._training_guide)
 
+  # @atoms REQ-225 — Onboarding Training Completion Write
   def _on_completed_training(self):
     ui_state.params.put("CompletedTrainingVersion", training_version)
     self.close()

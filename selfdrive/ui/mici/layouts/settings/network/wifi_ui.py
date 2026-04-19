@@ -55,6 +55,7 @@ class WifiIcon(Widget):
   def set_network_missing(self, missing: bool):
     self._network_missing = missing
 
+  # @atoms REQ-274 — WiFi Strength Icon Three-Tier Mapping
   @staticmethod
   def get_strength_icon_idx(strength: int) -> int:
     return round(strength / 100 * 2)
@@ -100,6 +101,7 @@ class WifiButton(BigButton):
     self._network_forgetting = False
     self._wrong_password = False
 
+  # @atoms REQ-273 — WiFi Wrong Password Recovery
   def update_network(self, network: Network):
     self._network = network
     self._wifi_icon.update_network(network)
@@ -204,6 +206,7 @@ class WifiButton(BigButton):
   def _is_connected(self):
     return self._wifi_manager.connected_ssid == self._network.ssid
 
+  # @atoms REQ-271 — WiFi Network Connection State Labels
   def _update_state(self):
     super()._update_state()
 
@@ -244,6 +247,7 @@ class ForgetButton(Widget):
     self._trash_txt = gui_app.texture("icons_mici/settings/network/new/trash.png", 29, 35)
     self.set_rect(rl.Rectangle(0, 0, 84 + self.MARGIN * 2, 84 + self.MARGIN * 2))
 
+  # @atoms REQ-272 — WiFi Forget Slide Confirmation
   def _handle_mouse_release(self, mouse_pos: MousePos):
     super()._handle_mouse_release(mouse_pos)
     dlg = BigConfirmationDialog("slide to forget", gui_app.texture("icons_mici/settings/network/new/trash.png", 54, 64), self._forget_network, red=True)
@@ -259,6 +263,7 @@ class ForgetButton(Widget):
     rl.draw_texture_ex(self._trash_txt, (trash_x, trash_y), 0, 1.0, rl.WHITE)
 
 
+# @atoms REQ-275 — WiFi Scanning Placeholder Button
 class ScanningButton(BigButton):
   def __init__(self):
     super().__init__("", "searching for networks")
@@ -274,6 +279,7 @@ class ScanningButton(BigButton):
     anim.render()
 
 
+# @atoms REQ-202 — Network Settings Layout
 class WifiUIMici(NavScroller):
   def __init__(self, wifi_manager: WifiManager):
     super().__init__()
@@ -362,6 +368,7 @@ class WifiUIMici(NavScroller):
           break
       return
 
+    # @atoms REQ-270 — WiFi Password Dialog Minimum Length
     dlg = BigInputDialog("enter password...", "", minimum_length=8,
                          confirm_callback=lambda _password: self._connect_with_password(ssid, _password))
     gui_app.push_widget(dlg)

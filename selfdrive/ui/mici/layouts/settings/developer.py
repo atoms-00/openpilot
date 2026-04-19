@@ -8,11 +8,13 @@ from openpilot.selfdrive.ui.ui_state import ui_state
 from openpilot.selfdrive.ui.widgets.ssh_key import SshKeyFetcher
 
 
+# @atoms REQ-200 — Developer Settings Layout
 class DeveloperLayoutMici(NavScroller):
   def __init__(self):
     super().__init__()
     self._ssh_fetcher = SshKeyFetcher(ui_state.params)
 
+    # @atoms REQ-254 — Developer SSH Key GitHub Fetch
     def github_username_callback(username: str):
       if username:
         self._ssh_keys_btn.set_value("Loading...")
@@ -34,6 +36,7 @@ class DeveloperLayoutMici(NavScroller):
     def ssh_keys_callback():
       github_username = ui_state.params.get("GithubUsername") or ""
       dlg = BigInputDialog("enter GitHub username...", github_username, minimum_length=0, confirm_callback=github_username_callback)
+      # @atoms REQ-255 — Developer SSH Fetch Time Validity Gate
       if not system_time_valid():
         dlg = BigDialog("", "Please connect to Wi-Fi to fetch your key.")
         gui_app.push_widget(dlg)
@@ -47,20 +50,25 @@ class DeveloperLayoutMici(NavScroller):
 
     # adb, ssh, ssh keys, debug mode, joystick debug mode, longitudinal maneuver mode, ip address
     # ******** Main Scroller ********
+    # @atoms REQ-249 — Developer ADB Onroad Gate
     self._adb_toggle = BigCircleParamControl(gui_app.texture("icons_mici/adb_short.png", 82, 82), "AdbEnabled", icon_offset=(0, 12))
     self._ssh_toggle = BigCircleParamControl(gui_app.texture("icons_mici/ssh_short.png", 82, 82), "SshEnabled", icon_offset=(0, 12))
+    # @atoms REQ-250 — Developer Joystick Onroad Gate
     self._joystick_toggle = BigToggle("joystick debug mode",
                                       initial_state=ui_state.params.get_bool("JoystickDebugMode"),
                                       toggle_callback=self._on_joystick_debug_mode)
+    # @atoms REQ-248 — Developer Maneuver Mode Release and Engagement Gate
     self._long_maneuver_toggle = BigToggle("longitudinal maneuver mode",
                                            initial_state=ui_state.params.get_bool("LongitudinalManeuverMode"),
                                            toggle_callback=self._on_long_maneuver_mode)
     self._lat_maneuver_toggle = BigToggle("lateral maneuver mode",
                                           initial_state=ui_state.params.get_bool("LateralManeuverMode"),
                                           toggle_callback=self._on_lat_maneuver_mode)
+    # @atoms REQ-247 — Developer Alpha Longitudinal Release Gate
     self._alpha_long_toggle = BigToggle("alpha longitudinal",
                                         initial_state=ui_state.params.get_bool("AlphaLongitudinalEnabled"),
                                         toggle_callback=self._on_alpha_long_enabled)
+    # @atoms REQ-256 — Developer Debug UI Toggle
     self._debug_mode_toggle = BigParamControl("ui debug mode", "ShowDebugInfo",
                                               toggle_callback=lambda checked: (gui_app.set_show_touches(checked),
                                                                                gui_app.set_show_fps(checked)))
@@ -113,6 +121,7 @@ class DeveloperLayoutMici(NavScroller):
     super()._update_state()
     self._ssh_fetcher.update()
 
+  # @atoms REQ-257 — Developer External Param Refresh
   def show_event(self):
     super().show_event()
     self._update_toggles()
@@ -146,6 +155,7 @@ class DeveloperLayoutMici(NavScroller):
     for key, item in self._refresh_toggles:
       item.set_checked(ui_state.params.get_bool(key))
 
+  # @atoms REQ-251 — Developer Joystick vs Maneuver Mutex
   def _on_joystick_debug_mode(self, state: bool):
     ui_state.params.put_bool("JoystickDebugMode", state)
     ui_state.params.put_bool("LongitudinalManeuverMode", False)
@@ -153,6 +163,8 @@ class DeveloperLayoutMici(NavScroller):
     ui_state.params.put_bool("LateralManeuverMode", False)
     self._lat_maneuver_toggle.set_checked(False)
 
+  # @atoms REQ-252 — Developer Lateral vs Longitudinal Maneuver Mutex
+  # @atoms REQ-253 — Developer Maneuver Restart-Required
   def _on_long_maneuver_mode(self, state: bool):
     ui_state.params.put_bool("LongitudinalManeuverMode", state)
     ui_state.params.put_bool("JoystickDebugMode", False)
