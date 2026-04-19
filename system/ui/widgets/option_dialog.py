@@ -17,6 +17,7 @@ ITEM_SPACING = 50
 LIST_ITEM_SPACING = 25
 
 
+# @atoms REQ-278 — Dialog Primitive Family
 class MultiOptionDialog(Widget):
   def __init__(self, title, options, current="", option_font_weight=FontWeight.MEDIUM, callback: Callable[[DialogResult], None] | None = None):
     super().__init__()

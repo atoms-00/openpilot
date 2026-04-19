@@ -67,6 +67,7 @@ class ScrollIndicator(Widget):
                         rl.Color(255, 255, 255, int(255 * 0.45)))
 
 
+# @atoms REQ-280 — Scroller Primitive Family
 class _Scroller(Widget):
   """Should use wrapper below to reduce boilerplate"""
   def __init__(self, items: list[Widget], horizontal: bool = True, snap_items: bool = False, spacing: int = ITEM_SPACING,
@@ -161,6 +162,7 @@ class _Scroller(Widget):
     self._scroll_enabled = enabled
 
   def _update_state(self):
+    # @atoms REQ-312 — Scroller Zoom on Scroll
     if DO_ZOOM:
       if self._scrolling_to[0] is not None or self.scroll_panel.state != ScrollState.STEADY:
         self._zoom_out_t = rl.get_time() + MIN_ZOOM_ANIMATION_TIME
@@ -192,6 +194,7 @@ class _Scroller(Widget):
     if not self._snap_items:
       return self.scroll_panel.get_offset()
 
+    # @atoms REQ-310 — Scroller Snap to Nearest Item
     # Snap closest item to center
     center_pos = self._rect.x + self._rect.width / 2 if self._horizontal else self._rect.y + self._rect.height / 2
     closest_delta_pos = float('inf')
@@ -381,6 +384,7 @@ class _Scroller(Widget):
     rl.end_scissor_mode()
 
     # Draw edge shadows on top of scroller content
+    # @atoms REQ-311 — Scroller Edge Shadows
     if self._edge_shadows:
       rl.draw_rectangle_gradient_h(int(self._rect.x), int(self._rect.y),
                                    EDGE_SHADOW_WIDTH, int(self._rect.height),

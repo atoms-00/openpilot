@@ -9,8 +9,10 @@ from openpilot.system.ui.widgets.label import UnifiedLabel
 from openpilot.common.filter_simple import FirstOrderFilter, BounceFilter
 
 
+# @atoms REQ-285 — Slider Primitive
 class SliderBase(Widget, abc.ABC):
   HORIZONTAL_PADDING = 8
+  # @atoms REQ-326 — Slider Confirm Delay
   CONFIRM_DELAY = 0.2
   PRESSED_SCALE = 1.07
 
@@ -52,6 +54,7 @@ class SliderBase(Widget, abc.ABC):
   def confirmed(self) -> bool:
     return self._confirmed_time > 0.0
 
+  # @atoms REQ-327 — Slider Reset on Show
   def show_event(self):
     super().show_event()
     self.reset()
@@ -79,6 +82,7 @@ class SliderBase(Widget, abc.ABC):
     if self._confirm_callback:
       self._confirm_callback()
 
+  # @atoms REQ-325 — Slider Drag Resistance
   def _handle_mouse_event(self, mouse_event):
     super()._handle_mouse_event(mouse_event)
 

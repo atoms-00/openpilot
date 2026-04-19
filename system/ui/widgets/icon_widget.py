@@ -3,6 +3,8 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.widgets import Widget
 
 
+# @atoms REQ-283 — IconWidget Primitive
+# @atoms REQ-321 — IconWidget Non-Interactive Render
 class IconWidget(Widget):
   def __init__(self, image_path: str, size: tuple[int, int], opacity: float = 1.0):
     super().__init__()

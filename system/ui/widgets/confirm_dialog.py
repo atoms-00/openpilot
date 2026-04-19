@@ -17,6 +17,7 @@ TEXT_PADDING = 10
 BACKGROUND_COLOR = rl.Color(27, 27, 27, 255)
 
 
+# @atoms REQ-278 — Dialog Primitive Family
 class ConfirmDialog(Widget):
   def __init__(self, text: str, confirm_text: str, cancel_text: str | None = None, rich: bool = False, callback: Callable[[DialogResult], None] | None = None):
     super().__init__()
@@ -74,11 +75,13 @@ class ConfirmDialog(Widget):
       self._html_renderer.set_rect(html_rect)
       self._scroller.render(text_rect)
 
+    # @atoms REQ-298 — Confirm Dialog Key Handling
     if rl.is_key_pressed(rl.KeyboardKey.KEY_ENTER):
       self._confirm_button_callback()
     elif rl.is_key_pressed(rl.KeyboardKey.KEY_ESCAPE):
       self._cancel_button_callback()
 
+    # @atoms REQ-299 — Confirm Dialog Single-Button Mode
     if self._cancel_text:
       self._confirm_button.render(confirm_button)
       self._cancel_button.render(cancel_button)

@@ -5,9 +5,11 @@ from openpilot.system.ui.lib.text_measure import measure_text_cached
 from openpilot.system.ui.widgets import Widget
 
 PASSWORD_MASK_CHAR = "•"
+# @atoms REQ-318 — InputBox Password Masking
 PASSWORD_MASK_DELAY = 1.5  # Seconds to show character before masking
 
 
+# @atoms REQ-282 — InputBox Primitive
 class InputBox(Widget):
   def __init__(self, max_text_size=255, password_mode=False):
     super().__init__()
@@ -52,6 +54,7 @@ class InputBox(Widget):
       self._show_cursor = True
       self._update_text_offset()
 
+  # @atoms REQ-320 — InputBox Scroll To Cursor
   def _update_text_offset(self):
     """Ensure the cursor is visible by adjusting text offset."""
     if self._visible_width == 0:
@@ -114,6 +117,7 @@ class InputBox(Widget):
     self._handle_keyboard_input()
 
     # Update cursor blink
+    # @atoms REQ-317 — InputBox Cursor Blink
     self._blink_counter += 1
     if self._blink_counter >= 30:
       self._show_cursor = not self._show_cursor
@@ -166,6 +170,7 @@ class InputBox(Widget):
 
     return masked_text
 
+  # @atoms REQ-319 — InputBox Mouse Cursor Position
   def _handle_mouse_release(self, mouse_pos: MousePos):
     # Calculate cursor position from click
     if len(self._input_text) > 0:

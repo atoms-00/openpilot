@@ -22,6 +22,7 @@ class LineSeparator(Widget):
                  LINE_COLOR)
 
 
+# @atoms REQ-280 — Scroller Primitive Family
 class Scroller(Widget):
   def __init__(self, items: list[Widget], spacing: int = ITEM_SPACING, line_separator: bool = False, pad_end: bool = True):
     super().__init__()

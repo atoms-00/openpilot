@@ -3,6 +3,7 @@ from collections.abc import Callable
 from openpilot.system.ui.lib.application import MousePos
 from openpilot.system.ui.widgets import Widget
 
+# @atoms REQ-329 — Toggle Color Palette
 ON_COLOR = rl.Color(51, 171, 76, 255)
 OFF_COLOR = rl.Color(0x39, 0x39, 0x39, 255)
 KNOB_COLOR = rl.WHITE
@@ -11,9 +12,11 @@ DISABLED_OFF_COLOR = rl.Color(0x39, 0x39, 0x39, 255)
 DISABLED_KNOB_COLOR = rl.Color(0x88, 0x88, 0x88, 255)
 WIDTH, HEIGHT = 160, 80
 BG_HEIGHT = 60
+# @atoms REQ-328 — Toggle Knob Animation Speed
 ANIMATION_SPEED = 8.0
 
 
+# @atoms REQ-286 — Toggle Primitive
 class Toggle(Widget):
   def __init__(self, initial_state: bool = False, callback: Callable[[bool], None] | None = None):
     super().__init__()
@@ -40,6 +43,7 @@ class Toggle(Widget):
   def get_state(self) -> bool:
     return self._state
 
+  # @atoms REQ-330 — Toggle Programmatic Set Without Callback
   def set_state(self, state: bool):
     self._state = state
     self._target = 1.0 if state else 0.0

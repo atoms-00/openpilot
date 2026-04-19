@@ -145,6 +145,7 @@ class CapsState(IntEnum):
   LOCK = 2
 
 
+# @atoms REQ-279 — Keyboard Primitive Family
 class MiciKeyboard(Widget):
   def __init__(self, auto_return_to_letters: str = ""):
     super().__init__()
@@ -261,6 +262,7 @@ class MiciKeyboard(Widget):
     if DEBUG:
       print('HANDLE MOUSE EVENT', mouse_event, self._closest_key[0].char if self._closest_key[0] else 'None')
 
+  # @atoms REQ-309 — Mici Keyboard Distance Selection
   def _get_closest_key(self) -> tuple[Key | None, float]:
     closest_key: tuple[Key | None, float] = (None, float('inf'))
     for row in self._current_keys:

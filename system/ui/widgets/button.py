@@ -9,6 +9,7 @@ from openpilot.system.ui.widgets.label import Label
 from openpilot.common.filter_simple import FirstOrderFilter
 
 
+# @atoms REQ-297 — Button Style Palette
 class ButtonStyle(IntEnum):
   NORMAL = 0  # Most common, neutral buttons
   PRIMARY = 1  # For main actions
@@ -78,6 +79,7 @@ BUTTON_DISABLED_BACKGROUND_COLORS = {
 }
 
 
+# @atoms REQ-277 — Button Primitive Family
 class Button(Widget):
   def __init__(self,
                text: str | Callable[[], str],

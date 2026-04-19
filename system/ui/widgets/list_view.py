@@ -269,6 +269,7 @@ class MultipleButtonAction(ItemAction):
           self.callback(i)
 
 
+# @atoms REQ-284 — List View Primitive
 class ListItem(Widget):
   def __init__(self, title: str | Callable[[], str] = "", icon: str | None = None, description: str | Callable[[], str] | None = None,
                description_visible: bool = False, callback: Callable | None = None,
@@ -308,6 +309,7 @@ class ListItem(Widget):
     super().set_parent_rect(parent_rect)
     self._rect.width = parent_rect.width
 
+  # @atoms REQ-322 — ListItem Expand on Title Click
   def _handle_mouse_release(self, mouse_pos: MousePos):
     if not self.is_visible:
       return
@@ -437,6 +439,7 @@ def simple_item(title: str | Callable[[], str], callback: Callable | None = None
   return ListItem(title=title, callback=callback)
 
 
+# @atoms REQ-323 — ListItem ToggleAction Binding
 def toggle_item(title: str | Callable[[], str], description: str | Callable[[], str] | None = None, initial_state: bool = False,
                 callback: Callable | None = None, icon: str = "", enabled: bool | Callable[[], bool] = True) -> ListItem:
   action = ToggleAction(initial_state=initial_state, enabled=enabled, callback=callback)
@@ -455,6 +458,7 @@ def text_item(title: str | Callable[[], str], value: str | Callable[[], str], de
   return ListItem(title=title, description=description, action_item=action, callback=callback)
 
 
+# @atoms REQ-324 — ListItem DualButtonAction Layout
 def dual_button_item(left_text: str | Callable[[], str], right_text: str | Callable[[], str],
                      left_callback: Callable | None = None, right_callback: Callable | None = None,
                      description: str | Callable[[], str] | None = None, enabled: bool | Callable[[], bool] = True) -> ListItem:

@@ -26,6 +26,7 @@ except Exception:
   PrimeType = None
 
 NM_DEVICE_STATE_NEED_AUTH = 60
+# @atoms REQ-334 — WiFi Password Length Bounds
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 64
 ITEM_HEIGHT = 160
@@ -44,6 +45,7 @@ class PanelType(IntEnum):
   ADVANCED = 1
 
 
+# @atoms REQ-335 — WiFi Connect Flow State Machine
 class UIState(IntEnum):
   IDLE = 0
   CONNECTING = 1
@@ -103,6 +105,7 @@ class NetworkUI(Widget):
     self._current_panel = panel
 
 
+# @atoms REQ-289 — Network Status Widgets
 class AdvancedNetworkSettings(Widget):
   def __init__(self, wifi_manager: WifiManager):
     super().__init__()
@@ -263,6 +266,7 @@ class AdvancedNetworkSettings(Widget):
     self._wifi_manager.process_callbacks()
 
     # If not using prime SIM, show GSM settings and enable IPv4 forwarding
+    # @atoms REQ-339 — Advanced Network GSM Visibility
     show_cell_settings = ui_state.prime_state.get_type() in (PrimeType.NONE, PrimeType.LITE)
     self._wifi_manager.set_ipv4_forward(show_cell_settings)
     self._roaming_btn.set_visible(show_cell_settings)
@@ -273,6 +277,7 @@ class AdvancedNetworkSettings(Widget):
     self._scroller.render(self._rect)
 
 
+# @atoms REQ-289 — Network Status Widgets
 class WifiManagerUI(Widget):
   def __init__(self, wifi_manager: WifiManager):
     super().__init__()
@@ -322,6 +327,7 @@ class WifiManagerUI(Widget):
       self.keyboard.reset(min_text_size=MIN_PASSWORD_LENGTH)
       self.keyboard.set_callback(lambda result: self._on_password_entered(cast(Network, self._state_network), result))
       gui_app.push_widget(self.keyboard)
+    # @atoms REQ-336 — WiFi Forget Flow Confirmation
     elif self.state == UIState.SHOW_FORGET_CONFIRM and self._state_network:
       confirm_dialog = ConfirmDialog("", tr("Forget"), tr("Cancel"), callback=lambda result: self.on_forgot_confirm_finished(self._state_network, result))
       confirm_dialog.set_text(tr("Forget Wi-Fi Network \"{}\"?").format(normalize_ssid(self._state_network.ssid)))
@@ -417,8 +423,10 @@ class WifiManagerUI(Widget):
   def _draw_status_icon(self, rect, network: Network):
     """Draw the status icon based on network's connection state"""
     icon_file = None
+    # @atoms REQ-337 — WiFi Network Checkmark on Connected
     if self._wifi_manager.connected_ssid == network.ssid and self.state != UIState.CONNECTING:
       icon_file = "icons/checkmark.png"
+    # @atoms REQ-338 — WiFi Unsupported Network Lock
     elif network.security_type == SecurityType.UNSUPPORTED:
       icon_file = "icons/circled_slash.png"
     elif network.security_type != SecurityType.OPEN:

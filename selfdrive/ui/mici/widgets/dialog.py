@@ -23,6 +23,7 @@ class BigDialogBase(NavWidget, abc.ABC):
     self.set_rect(rl.Rectangle(0, 0, gui_app.width, gui_app.height))
 
 
+# @atoms REQ-278 — Dialog Primitive Family
 class BigDialog(BigDialogBase):
   def __init__(self, title: str, description: str, icon: Union[rl.Texture, None] = None):
     super().__init__()
@@ -37,6 +38,7 @@ class BigDialog(BigDialogBase):
     ))
 
 
+# @atoms REQ-300 — Confirmation Slider Dismiss
 class BigConfirmationDialog(BigDialogBase):
   def __init__(self, title: str, icon: rl.Texture, confirm_callback: Callable[[], None],
                exit_on_confirm: bool = True, red: bool = False):
@@ -66,6 +68,7 @@ class BigConfirmationDialog(BigDialogBase):
     self._slider.render(self._rect)
 
 
+# @atoms REQ-301 — Input Dialog Minimum Length Gate
 class BigInputDialog(BigDialogBase):
   BACK_TOUCH_AREA_PERCENTAGE = 0.2
   BACKSPACE_RATE = 25  # hz
@@ -111,6 +114,7 @@ class BigInputDialog(BigDialogBase):
       return
 
     last_mouse_event = gui_app.last_mouse_event
+    # @atoms REQ-302 — Input Dialog Backspace Repeat
     if last_mouse_event.left_down and rl.check_collision_point_rec(last_mouse_event.pos, self._top_right_button_rect) and self._backspace_img_alpha.x > 1:
       if self._backspace_held_time is None:
         self._backspace_held_time = rl.get_time()

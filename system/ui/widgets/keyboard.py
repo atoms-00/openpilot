@@ -13,7 +13,9 @@ from openpilot.system.ui.widgets.inputbox import InputBox
 from openpilot.system.ui.widgets.label import Label
 
 KEY_FONT_SIZE = 96
+# @atoms REQ-305 — Keyboard Shift and Caps Lock State Machine
 DOUBLE_CLICK_THRESHOLD = 0.5  # seconds
+# @atoms REQ-306 — Keyboard Delete Repeat
 DELETE_REPEAT_DELAY = 0.5
 DELETE_REPEAT_INTERVAL = 0.07
 
@@ -58,6 +60,7 @@ KEYBOARD_LAYOUTS = {
 }
 
 
+# @atoms REQ-279 — Keyboard Primitive Family
 class Keyboard(Widget):
   def __init__(self, max_text_size: int = 255, min_text_size: int = 0, password_mode: bool = False, show_password_toggle: bool = False,
                callback: Callable[[DialogResult], None] | None = None):
@@ -127,6 +130,7 @@ class Keyboard(Widget):
   def set_callback(self, callback: Callable[[DialogResult], None] | None):
     self._callback = callback
 
+  # @atoms REQ-308 — Keyboard Password Mode Eye Toggle
   def _eye_button_callback(self):
     self._password_mode = not self._password_mode
 
@@ -190,6 +194,7 @@ class Keyboard(Widget):
         key_rect = rl.Rectangle(start_x, row_y_start + row * (key_height + v_space), new_width, key_height)
         start_x += new_width
 
+        # @atoms REQ-307 — Keyboard Enter Minimum Text Gate
         is_enabled = key != ENTER_KEY or len(self._input_box.text) >= self._min_text_size
 
         if key == BACKSPACE_KEY and self._all_keys[BACKSPACE_KEY].is_pressed and not self._backspace_pressed:

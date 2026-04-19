@@ -56,6 +56,7 @@ class HtmlElement:
   indent_level: int = 0
 
 
+# @atoms REQ-287 — HTML Render Primitive
 class HtmlRenderer(Widget):
   def __init__(self, file_path: str | None = None, text: str | None = None,
                text_size: dict | None = None, text_color: rl.Color = rl.WHITE, center_text: bool = False):
@@ -102,6 +103,7 @@ class HtmlRenderer(Widget):
       content = file.read()
     self.parse_html_content(content)
 
+  # @atoms REQ-331 — HTML Renderer Tag Subset
   def parse_html_content(self, html_content: str) -> None:
     self.elements.clear()
     self._cached_height = None
@@ -219,6 +221,7 @@ class HtmlRenderer(Widget):
 
     return current_y - rect.y
 
+  # @atoms REQ-332 — HTML Renderer Height Caching
   def get_total_height(self, content_width: int) -> float:
     if self._cached_height is not None and self._cached_width == content_width:
       return self._cached_height

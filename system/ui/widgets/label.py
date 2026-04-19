@@ -105,6 +105,7 @@ def gui_text_box(
 
 
 # Non-interactive text area. Can render emojis and an optional specified icon.
+# @atoms REQ-281 — Label Primitive
 class Label(Widget):
   def __init__(self,
                text: str | Callable[[], str],
@@ -158,6 +159,7 @@ class Label(Widget):
       content_width = self._rect.width - self._text_padding * 2
       if self._icon:
         content_width -= self._icon.width + ICON_PADDING
+      # @atoms REQ-313 — Label Eliding
       if text_size.x > content_width:
         _ellipsis = "..."
         left, right = 0, len(text)
@@ -216,6 +218,7 @@ class Label(Widget):
       elif self._text_alignment == rl.GuiTextAlignment.TEXT_ALIGN_RIGHT:
         line_pos.x += self._rect.width - text_size.x - self._text_padding
 
+      # @atoms REQ-314 — Label Emoji Rendering
       prev_index = 0
       for start, end, emoji in emojis:
         text_before = text[prev_index:start]
@@ -231,6 +234,7 @@ class Label(Widget):
       text_pos.y += (text_size.y or self._font_size * FONT_SCALE) * self._line_scale
 
 
+# @atoms REQ-281 — Label Primitive
 class UnifiedLabel(Widget):
   """
   Unified label widget that combines functionality from gui_label, gui_text_box, and Label.
@@ -596,6 +600,7 @@ class UnifiedLabel(Widget):
     # Render each line
     current_y = start_y
     for idx, (line, size, emojis) in enumerate(zip(visible_lines, visible_sizes, visible_emojis, strict=True)):
+      # @atoms REQ-316 — UnifiedLabel Overflow Scroll
       if self._needs_scroll:
         if self._scroll_state == ScrollState.STARTING:
           if self._scroll_pause_t is None:
@@ -640,6 +645,7 @@ class UnifiedLabel(Widget):
 
       rl.end_scissor_mode()
 
+  # @atoms REQ-315 — UnifiedLabel Shimmer Animation
   def _shimmer_alpha(self, char_x: float, shimmer_left: float, shimmer_width: float) -> float:
     """Compute shimmer opacity multiplier for a character at the given x position."""
     sigma = shimmer_width * self.SHIMMER_BLUR_RADIUS

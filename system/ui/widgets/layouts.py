@@ -13,6 +13,8 @@ class Alignment(IntFlag):
   BOTTOM = 32
 
 
+# @atoms REQ-288 — Layout Primitives
+# @atoms REQ-333 — HBox Layout Alignment
 class HBoxLayout(Widget):
   """
   A Widget that lays out child Widgets horizontally.

@@ -12,9 +12,11 @@ from openpilot.system.ui.lib.application import FontWeight, gui_app
 from openpilot.system.ui.widgets.label import UnifiedLabel
 
 
+# @atoms REQ-278 — Dialog Primitive Family
 class PairingDialog(NavWidget):
   """Dialog for device pairing with QR code."""
 
+  # @atoms REQ-303 — Pairing Dialog QR Refresh
   QR_REFRESH_INTERVAL = 300  # 5 minutes in seconds
 
   def __init__(self):
@@ -65,6 +67,7 @@ class PairingDialog(NavWidget):
       self._generate_qr_code()
       self._last_qr_generation = current_time
 
+  # @atoms REQ-304 — Pairing Dialog Auto-Dismiss on Pair
   def _update_state(self):
     super()._update_state()
     if ui_state.prime_state.is_paired() and not self.is_dismissing:

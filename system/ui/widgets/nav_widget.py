@@ -7,8 +7,10 @@ from openpilot.system.ui.widgets import Widget
 from openpilot.common.filter_simple import BounceFilter, FirstOrderFilter
 from openpilot.system.ui.lib.application import gui_app, MousePos, MouseEvent
 
+# @atoms REQ-340 — NavWidget Swipe Dismiss Threshold
 SWIPE_AWAY_THRESHOLD = 80  # px to dismiss after releasing
 START_DISMISSING_THRESHOLD = 40  # px to start dismissing while dragging
+# @atoms REQ-341 — NavWidget Horizontal Disqualification
 BLOCK_SWIPE_AWAY_THRESHOLD = 60  # px horizontal movement to block swipe away
 
 NAV_BAR_MARGIN = 6
@@ -19,6 +21,8 @@ DISMISS_PUSH_OFFSET = NAV_BAR_MARGIN + NAV_BAR_HEIGHT + 50  # px extra to push d
 DISMISS_ANIMATION_RC = 0.2  # slightly slower for non-user triggered dismiss animation
 
 
+# @atoms REQ-290 — Nav Widget Primitive
+# @atoms REQ-343 — NavBar Idle Fade
 class NavBar(Widget):
   FADE_AFTER_SECONDS = 2.0
 
@@ -49,6 +53,7 @@ class NavBar(Widget):
     rl.draw_rectangle_rounded_lines_ex(self._rect, 1.0, 6, 2, rl.Color(0, 0, 0, int(255 * 0.3 * alpha)))
 
 
+# @atoms REQ-290 — Nav Widget Primitive
 class NavWidget(Widget, abc.ABC):
   """
   A full screen widget that supports back navigation by swiping down from the top.
@@ -175,6 +180,7 @@ class NavWidget(Widget, abc.ABC):
 
   def _layout(self):
     # Dim whatever is behind this widget, fading with position (runs after _update_state so position is correct)
+    # @atoms REQ-342 — NavWidget Overlay Fade
     overlay_alpha = int(200 * max(0.0, min(1.0, 1.0 - self._rect.y / self._rect.height))) if self._rect.height > 0 else 0
     rl.draw_rectangle_rec(rl.Rectangle(0, 0, self._rect.width, self._rect.height), rl.Color(0, 0, 0, overlay_alpha))
 

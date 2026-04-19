@@ -18,6 +18,7 @@ SCROLLING_SPEED_PX_S = 50
 COMPLICATION_SIZE    = 36
 LABEL_COLOR          = rl.Color(255, 255, 255, int(255 * 0.9))
 COMPLICATION_GREY    = rl.Color(0xAA, 0xAA, 0xAA, 255)
+# @atoms REQ-291 — Button Press Scale Feedback
 PRESSED_SCALE = 1.15 if DO_ZOOM else 1.07
 
 
@@ -27,6 +28,7 @@ class ScrollState(Enum):
   POST_SCROLL = 2
 
 
+# @atoms REQ-277 — Button Primitive Family
 class BigCircleButton(Widget):
   def __init__(self, icon: rl.Texture, red: bool = False, icon_offset: tuple[int, int] = (0, 0)):
     super().__init__()
@@ -50,6 +52,7 @@ class BigCircleButton(Widget):
 
   def _draw_content(self, btn_y: float):
     # draw icon
+    # @atoms REQ-293 — Button Disabled Opacity
     icon_color = rl.Color(255, 255, 255, int(255 * 0.9)) if self.enabled else rl.Color(255, 255, 255, int(255 * 0.35))
     rl.draw_texture_ex(self._txt_icon, (self._rect.x + (self._rect.width - self._txt_icon.width) / 2 + self._icon_offset[0],
                                         btn_y + (self._rect.height - self._txt_icon.height) / 2 + self._icon_offset[1]), 0, 1.0, icon_color)
@@ -181,6 +184,7 @@ class BigButton(Widget):
   def get_text(self):
     return self.text
 
+  # @atoms REQ-292 — Button Shake Animation
   def trigger_shake(self):
     self._shake_start = rl.get_time()
 
@@ -265,6 +269,7 @@ class BigButton(Widget):
       self._draw_content(btn_y)
 
 
+# @atoms REQ-294 — Button Toggle State on Release
 class BigToggle(BigButton):
   def __init__(self, text: str, value: str = "", initial_state: bool = False, toggle_callback: Callable | None = None):
     super().__init__(text, value, "")
@@ -300,6 +305,7 @@ class BigToggle(BigButton):
     self._draw_pill(x, y, self._checked)
 
 
+# @atoms REQ-295 — Button MultiToggle Option Cycling
 class BigMultiToggle(BigToggle):
   def __init__(self, text: str, options: list[str], toggle_callback: Callable | None = None,
                select_callback: Callable | None = None):
@@ -390,6 +396,7 @@ class BigMultiParamToggle(BigMultiToggle):
     self._params.put_nonblocking(self._param, new_idx)
 
 
+# @atoms REQ-296 — Button Param Persistence
 class BigParamControl(BigToggle):
   def __init__(self, text: str, param: str, toggle_callback: Callable | None = None):
     super().__init__(text, "", toggle_callback=toggle_callback)
