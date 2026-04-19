@@ -2,9 +2,11 @@ import pyray as rl
 from openpilot.system.ui.lib.application import FONT_SCALE, font_fallback
 from openpilot.system.ui.lib.emoji import find_emoji
 
+# @atoms REQ-381 — UI Runtime Library
 _cache: dict[int, rl.Vector2] = {}
 
 
+# @atoms REQ-391 — Text Measurement Cache
 def measure_text_cached(font: rl.Font, text: str, font_size: int, spacing: float = 0) -> rl.Vector2:
   """Caches text measurements to avoid redundant calculations."""
   font = font_fallback(font)

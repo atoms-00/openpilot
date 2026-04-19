@@ -4,6 +4,8 @@ import openpilot.system.ui.tici_reset as tici_reset
 import openpilot.system.ui.mici_reset as mici_reset
 
 
+# @atoms REQ-382 — System UI Applications
+# @atoms REQ-398 — Reset Entry Point
 def main():
   if gui_app.big_ui():
     tici_reset.main()

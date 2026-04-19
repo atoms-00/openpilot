@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Optional, cast
 from openpilot.system.ui.lib.application import gui_app, GL_VERSION
 
+# @atoms REQ-381 — UI Runtime Library
 MAX_GRADIENT_COLORS = 20  # includes stops as well
 
 
@@ -203,6 +204,7 @@ def triangulate(pts: np.ndarray) -> list[tuple[float, float]]:
   return cast(list, np.array(tri_strip).tolist())
 
 
+# @atoms REQ-390 — Shader Polygon Renderer
 def draw_polygon(origin_rect: rl.Rectangle, points: np.ndarray,
                  color: Optional[rl.Color] = None, gradient: Gradient | None = None):
 

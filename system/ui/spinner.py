@@ -21,6 +21,7 @@ else:
   TEXTURE_SIZE = 140
   WRAPPED_SPACING = 10
   CENTERED_SPACING = 20
+# @atoms REQ-382 — System UI Applications
 DEGREES_PER_SECOND = 360.0  # one full rotation per second
 MARGIN_H = 100
 FONT_SIZE = 96
@@ -32,6 +33,7 @@ def clamp(value, min_value, max_value):
   return max(min(value, max_value), min_value)
 
 
+# @atoms REQ-395 — Spinner Widget
 class Spinner(Widget):
   def __init__(self):
     super().__init__()

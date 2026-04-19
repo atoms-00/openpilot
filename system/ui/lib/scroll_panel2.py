@@ -8,6 +8,7 @@ from openpilot.system.ui.lib.application import gui_app, MouseEvent
 from openpilot.system.hardware import TICI
 from collections import deque
 
+# @atoms REQ-381 — UI Runtime Library
 MIN_VELOCITY = 10  # px/s, changes from auto scroll to steady state
 MIN_VELOCITY_FOR_CLICKING = 2 * 60  # px/s, accepts clicks while auto scrolling below this velocity
 MIN_DRAG_PIXELS = 12
@@ -43,6 +44,7 @@ class ScrollState(Enum):
   AUTO_SCROLL = 3
 
 
+# @atoms REQ-389 — Scroll Panel v2
 class GuiScrollPanel2:
   def __init__(self, horizontal: bool = True, handle_out_of_bounds: bool = True) -> None:
     self._horizontal = horizontal

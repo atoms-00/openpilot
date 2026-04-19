@@ -13,6 +13,7 @@ from openpilot.system.ui.widgets.scroller import Scroller
 from openpilot.system.ui.mici_setup import GreyBigButton, FailedPage
 from openpilot.selfdrive.ui.mici.widgets.dialog import BigDialog, BigConfirmationCircleButton
 
+# @atoms REQ-382 — System UI Applications
 USERDATA = "/dev/disk/by-partlabel/userdata"
 TIMEOUT = 3*60
 
@@ -58,6 +59,7 @@ class ResettingPage(BigDialog):
     super()._render(_)
 
 
+# @atoms REQ-405 — MICI Reset Dialog
 class Reset(Scroller):
   def __init__(self, mode):
     super().__init__()

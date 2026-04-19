@@ -39,6 +39,7 @@ INSTALLER_DESTINATION_PATH = "/tmp/installer"
 INSTALLER_URL_PATH = "/tmp/installer_url"
 
 
+# @atoms REQ-382 — System UI Applications
 class NetworkConnectivityMonitor:
   def __init__(self, should_check: Callable[[], bool] | None = None):
     self.network_connected = threading.Event()
@@ -429,6 +430,7 @@ class NetworkSetupPage(NetworkSetupPageBase, NavScroller):
     self.set_back_callback(back_callback)
 
 
+# @atoms REQ-404 — MICI Setup Wizard
 class Setup(Widget):
   def __init__(self):
     super().__init__()

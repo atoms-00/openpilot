@@ -13,6 +13,7 @@ from openpilot.system.ui.widgets import Widget
 from openpilot.system.ui.widgets.button import Button, ButtonStyle
 from openpilot.system.ui.widgets.label import gui_label, gui_text_box
 
+# @atoms REQ-382 — System UI Applications
 USERDATA = "/dev/disk/by-partlabel/userdata"
 TIMEOUT = 3*60
 
@@ -29,6 +30,7 @@ class ResetState(IntEnum):
   FAILED = 3
 
 
+# @atoms REQ-402 — TICI Reset Dialog
 class Reset(Widget):
   def __init__(self, mode):
     super().__init__()

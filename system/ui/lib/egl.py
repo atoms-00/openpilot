@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 from openpilot.common.swaglog import cloudlog
 
+# @atoms REQ-381 — UI Runtime Library
 # EGL constants
 EGL_LINUX_DMA_BUF_EXT = 0x3270
 EGL_WIDTH = 0x3057
@@ -62,6 +63,7 @@ class EGLState:
 _egl = EGLState()
 
 
+# @atoms REQ-384 — EGL DMA-BUF Image
 def init_egl() -> bool:
   """Initialize EGL and load necessary functions"""
   global _egl

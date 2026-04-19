@@ -1,6 +1,8 @@
 import pyray as rl
 
 
+# @atoms REQ-381 — UI Runtime Library
+# @atoms REQ-392 — GUI Style Context
 class GuiStyleContext:
   def __init__(self, styles: list[tuple[int, int, int]]):
     """styles is a list of tuples (control, prop, new_value)"""

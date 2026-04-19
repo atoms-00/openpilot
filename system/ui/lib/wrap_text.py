@@ -37,9 +37,11 @@ def _break_long_word(font: rl.Font, word: str, font_size: int, max_width: int, s
   return parts
 
 
+# @atoms REQ-381 — UI Runtime Library
 _cache: dict[int, list[str]] = {}
 
 
+# @atoms REQ-394 — Text Word-Wrap
 def wrap_text(font: rl.Font, text: str, font_size: int, max_width: int, spacing: float = 0) -> list[str]:
   font = font_fallback(font)
   spacing = round(spacing, 4)

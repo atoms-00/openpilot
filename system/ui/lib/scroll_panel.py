@@ -4,6 +4,7 @@ from enum import IntEnum
 from openpilot.system.ui.lib.application import gui_app, MouseEvent
 from openpilot.common.filter_simple import FirstOrderFilter
 
+# @atoms REQ-381 — UI Runtime Library
 # Scroll constants for smooth scrolling behavior
 MOUSE_WHEEL_SCROLL_SPEED = 50
 BOUNCE_RETURN_RATE = 5              # ~0.92 at 60fps
@@ -19,6 +20,7 @@ class ScrollState(IntEnum):
   DRAGGING_CONTENT = 1  # User is actively dragging the content
 
 
+# @atoms REQ-388 — Scroll Panel v1
 class GuiScrollPanel:
   def __init__(self):
     self._scroll_state: ScrollState = ScrollState.IDLE

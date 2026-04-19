@@ -22,6 +22,7 @@ from openpilot.system.ui.widgets.network import WifiManagerUI, WifiManager
 
 NetworkType = log.DeviceState.NetworkType
 
+# @atoms REQ-382 — System UI Applications
 MARGIN = 50
 TITLE_FONT_SIZE = 90
 TITLE_FONT_WEIGHT = FontWeight.MEDIUM
@@ -48,6 +49,7 @@ class SetupState(IntEnum):
   CUSTOM_SOFTWARE_WARNING = 7
 
 
+# @atoms REQ-401 — TICI Setup Wizard
 class Setup(Widget):
   def __init__(self):
     super().__init__()

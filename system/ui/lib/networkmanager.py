@@ -1,6 +1,7 @@
 from enum import IntEnum
 
 
+# @atoms REQ-381 — UI Runtime Library
 # NetworkManager device states
 class NMDeviceState(IntEnum):
   # https://networkmanager.dev/docs/api/1.46/nm-dbus-types.html#NMDeviceState
@@ -34,6 +35,7 @@ class NMDeviceStateReason(IntEnum):
 
 
 # NetworkManager constants
+# @atoms REQ-387 — NetworkManager D-Bus Constants
 NM = "org.freedesktop.NetworkManager"
 NM_PATH = '/org/freedesktop/NetworkManager'
 NM_IFACE = 'org.freedesktop.NetworkManager'

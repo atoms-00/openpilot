@@ -4,6 +4,8 @@ import openpilot.system.ui.tici_updater as tici_updater
 import openpilot.system.ui.mici_updater as mici_updater
 
 
+# @atoms REQ-382 — System UI Applications
+# @atoms REQ-397 — Update Entry Point
 def main():
   if gui_app.big_ui():
     tici_updater.main()

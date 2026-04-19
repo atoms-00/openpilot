@@ -8,6 +8,7 @@ import pyray as rl
 
 from openpilot.system.ui.lib.application import FONT_DIR
 
+# @atoms REQ-381 — UI Runtime Library
 _cache: dict[str, rl.Texture] = {}
 
 EMOJI_REGEX = re.compile(
@@ -42,6 +43,7 @@ def _load_emoji_font() -> ImageFont.FreeTypeFont:
 def find_emoji(text):
   return [(m.start(), m.end(), m.group()) for m in EMOJI_REGEX.finditer(text)]
 
+# @atoms REQ-385 — Emoji Renderer
 def emoji_tex(emoji):
   if emoji not in _cache:
     img = Image.new("RGBA", (128, 128), (0, 0, 0, 0))

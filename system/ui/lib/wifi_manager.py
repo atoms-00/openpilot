@@ -31,6 +31,7 @@ try:
 except Exception:
   Params = None
 
+# @atoms REQ-381 — UI Runtime Library
 TETHERING_IP_ADDRESS = "192.168.43.1"
 DEFAULT_TETHERING_PASSWORD = "swagswagcomma"
 SIGNAL_QUEUE_SIZE = 10
@@ -151,6 +152,7 @@ class WifiState:
   status: ConnectStatus = ConnectStatus.DISCONNECTED
 
 
+# @atoms REQ-393 — WiFi Manager
 class WifiManager:
   def __init__(self):
     self._networks: list[Network] = []  # an unsorted list of available Networks. a Network can be comprised of multiple APs

@@ -15,6 +15,7 @@ UI_DIR = files("openpilot.selfdrive.ui")
 TRANSLATIONS_DIR = UI_DIR.joinpath("translations")
 LANGUAGES_FILE = TRANSLATIONS_DIR.joinpath("languages.json")
 
+# @atoms REQ-381 — UI Runtime Library
 UNIFONT_LANGUAGES = [
   "th",
   "zh-CHT",
@@ -145,6 +146,7 @@ def load_translations(path) -> tuple[dict[str, str], dict[str, list[str]]]:
   return translations, plurals
 
 
+# @atoms REQ-386 — Multilang Translation Engine
 class Multilang:
   def __init__(self):
     self._params = Params() if Params is not None else None

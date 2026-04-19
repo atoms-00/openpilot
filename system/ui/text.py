@@ -9,6 +9,7 @@ from openpilot.system.ui.lib.text_measure import measure_text_cached
 from openpilot.system.ui.widgets import Widget
 from openpilot.system.ui.widgets.button import Button, ButtonStyle
 
+# @atoms REQ-382 — System UI Applications
 if BIG_UI:
   MARGIN = 50
   SPACING = 40
@@ -54,6 +55,7 @@ def wrap_text(text, font_size, max_width):
   return lines
 
 
+# @atoms REQ-396 — Text Viewer Window
 class TextWindow(Widget):
   def __init__(self, text: str):
     super().__init__()

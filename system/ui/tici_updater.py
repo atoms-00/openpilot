@@ -14,6 +14,7 @@ from openpilot.system.ui.widgets.label import gui_text_box, gui_label
 from openpilot.system.ui.widgets.network import WifiManagerUI
 
 # Constants
+# @atoms REQ-382 — System UI Applications
 MARGIN = 50
 BUTTON_HEIGHT = 160
 BUTTON_WIDTH = 400
@@ -31,6 +32,7 @@ class Screen(IntEnum):
   PROGRESS = 2
 
 
+# @atoms REQ-400 — TICI Update UI
 class Updater(Widget):
   def __init__(self, updater_path, manifest_path):
     super().__init__()

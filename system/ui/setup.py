@@ -4,6 +4,8 @@ import openpilot.system.ui.tici_setup as tici_setup
 import openpilot.system.ui.mici_setup as mici_setup
 
 
+# @atoms REQ-382 — System UI Applications
+# @atoms REQ-399 — Setup Entry Point
 def main():
   if gui_app.big_ui():
     tici_setup.main()

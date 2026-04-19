@@ -15,6 +15,7 @@ from openpilot.system.ui.mici_setup import (NetworkSetupPage, FailedPage, Networ
                                             GreyBigButton, BigPillButton)
 
 
+# @atoms REQ-382 — System UI Applications
 class UpdaterNetworkSetupPage(NetworkSetupPage):
   def __init__(self, network_monitor, continue_callback):
     super().__init__(network_monitor, continue_callback, back_callback=None)
@@ -61,6 +62,7 @@ class ProgressPage(NavWidget):
     ))
 
 
+# @atoms REQ-403 — MICI Update UI
 class Updater(Scroller):
   def __init__(self, updater_path, manifest_path):
     super().__init__()
