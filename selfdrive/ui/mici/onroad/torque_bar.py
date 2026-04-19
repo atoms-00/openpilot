@@ -14,6 +14,7 @@ from openpilot.system.ui.widgets import Widget
 from openpilot.common.filter_simple import FirstOrderFilter
 
 # TODO: arc_bar_pts doesn't consider rounded end caps part of the angle span
+# @atoms REQ-151 — Torque Bar Arc Geometry
 TORQUE_ANGLE_SPAN = 12.7
 
 DEBUG = False
@@ -145,9 +146,11 @@ def arc_bar_pts(cx: float, cy: float,
   return pts
 
 
+# @atoms REQ-150 — Torque Utilization Estimation
 DEFAULT_MAX_LAT_ACCEL = 3.0  # m/s^2
 
 
+# @atoms REQ-188 — Torque Bar Widget
 class TorqueBar(Widget):
   def __init__(self, demo: bool = False):
     super().__init__()
@@ -164,6 +167,7 @@ class TorqueBar(Widget):
       return
 
     # torque line
+    # @atoms REQ-150 — Torque Utilization Estimation
     if ui_state.sm['controlsState'].lateralControlState.which() == 'angleState':
       controls_state = ui_state.sm['controlsState']
       car_state = ui_state.sm['carState']
@@ -194,6 +198,7 @@ class TorqueBar(Widget):
     torque_line_height = np.interp(abs(self._torque_filter.x), [0.5, 1], [14, 56])
 
     # animate alpha and angle span
+    # @atoms REQ-152 — Torque Bar Engagement Visibility
     if not self._demo:
       self._torque_line_alpha_filter.update(ui_state.status != UIStatus.DISENGAGED)
     else:
@@ -233,6 +238,7 @@ class TorqueBar(Widget):
       end_grad_pt = (cx * (1 - 0.65) + (max(bg_pts[:, 0]) * 0.65)) / rect.width
 
     # fade to orange as we approach max torque
+    # @atoms REQ-153 — Torque Bar High-Torque Color Transition
     start_color = blend_colors(
       rl.Color(255, 255, 255, int(255 * 0.9 * self._torque_line_alpha_filter.x)),
       rl.Color(255, 200, 0, int(255 * self._torque_line_alpha_filter.x)),  # yellow

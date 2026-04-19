@@ -12,10 +12,12 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.lib.shader_polygon import draw_polygon, Gradient
 from openpilot.system.ui.widgets import Widget
 
+# @atoms REQ-176 — Path Draw Distance Bounds
 CLIP_MARGIN = 500
 MIN_DRAW_DISTANCE = 10.0
 MAX_DRAW_DISTANCE = 100.0
 
+# @atoms REQ-174 — Path Gradient by Throttle Allowance
 THROTTLE_COLORS = [
   rl.Color(13, 248, 122, 102),   # HSLF(148/360, 0.94, 0.51, 0.4)
   rl.Color(114, 255, 92, 89),    # HSLF(112/360, 1.0, 0.68, 0.35)
@@ -28,6 +30,7 @@ NO_THROTTLE_COLORS = [
   rl.Color(242, 242, 242, 0),   # HSLF(112/360, 0.0, 0.95, 0.0)
 ]
 
+# @atoms REQ-173 — Lane Line Color by Engagement State
 LANE_LINE_COLORS = {
   UIStatus.DISENGAGED: rl.Color(200, 200, 200, 255),
   UIStatus.OVERRIDE: rl.Color(255, 255, 255, 255),
@@ -48,6 +51,7 @@ class LeadVehicle:
   fill_alpha: int = 0
 
 
+# @atoms REQ-103 — Onroad Path Overlay
 class ModelRenderer(Widget):
   def __init__(self):
     super().__init__()
@@ -159,6 +163,7 @@ class ModelRenderer(Widget):
     self._road_edge_stds = np.array(model.roadEdgeStds, dtype=np.float32)
     self._acceleration_x = np.array(model.acceleration.x, dtype=np.float32)
 
+  # @atoms REQ-177 — Lead Vehicle Chevron Indicator
   def _update_leads(self, radar_state, path_x_array):
     """Update positions of lead vehicles"""
     self._lead_vehicles = [LeadVehicle(), LeadVehicle()]
@@ -216,6 +221,7 @@ class ModelRenderer(Widget):
 
     self._update_experimental_gradient()
 
+  # @atoms REQ-175 — Experimental Mode Path Acceleration Coloring
   def _update_experimental_gradient(self):
     """Pre-calculate experimental mode gradient colors"""
     if not self._experimental_mode:
@@ -257,6 +263,7 @@ class ModelRenderer(Widget):
     self._exp_gradient.colors = segment_colors
     self._exp_gradient.stops = gradient_stops
 
+  # @atoms REQ-177 — Lead Vehicle Chevron Indicator
   def _update_lead_vehicle(self, d_rel, v_rel, point, rect):
     speed_buff, lead_buff = 10.0, 40.0
 
@@ -304,6 +311,7 @@ class ModelRenderer(Widget):
 
     return color
 
+  # @atoms REQ-173 — Lane Line Color by Engagement State
   def _draw_lane_lines(self):
     """Draw lane lines and road edges"""
     """Two closest lines should be green (lane line or road edges)"""
@@ -322,6 +330,7 @@ class ModelRenderer(Widget):
       color = self._get_ll_color(float(1.0 - self._road_edge_stds[i]), float(self._lane_line_probs[i + 1]) < 0.25, i == 0)
       draw_polygon(self._rect, road_edge.projected_points, color)
 
+  # @atoms REQ-174 — Path Gradient by Throttle Allowance
   def _draw_path(self, sm):
     """Draw path with dynamic coloring based on mode and throttle state."""
     if not self._path.projected_points.size:
@@ -354,6 +363,7 @@ class ModelRenderer(Widget):
       else:
         draw_polygon(self._rect, self._path.projected_points, gradient=gradient)
 
+  # @atoms REQ-177 — Lead Vehicle Chevron Indicator
   def _draw_lead_indicator(self):
     # Draw lead vehicles if available
     for lead in self._lead_vehicles:

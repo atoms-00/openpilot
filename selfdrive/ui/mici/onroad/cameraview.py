@@ -10,6 +10,7 @@ from openpilot.system.ui.lib.egl import init_egl, create_egl_image, destroy_egl_
 from openpilot.system.ui.widgets import Widget
 from openpilot.selfdrive.ui.ui_state import ui_state, UIStatus
 
+# @atoms REQ-178 — Camera Stream Reconnection Policy
 CONNECTION_RETRY_INTERVAL = 0.2  # seconds between connection attempts
 
 VERSION = """
@@ -38,6 +39,9 @@ void main() {
 """
 
 # Choose fragment shader based on platform capabilities
+# @atoms REQ-179 — Engaged Camera Color Grading
+# @atoms REQ-180 — Disengaged Camera Dim
+# @atoms REQ-181 — Driver Camera Enhancement Pipeline
 if TICI:
   FRAME_FRAGMENT_SHADER = """
     #version 300 es
@@ -104,6 +108,7 @@ else:
     """
 
 
+# @atoms REQ-191 — Camera View Pipeline
 class CameraView(Widget):
   def __init__(self, name: str, stream_type: VisionStreamType):
     super().__init__()
@@ -149,6 +154,7 @@ class CameraView(Widget):
 
     ui_state.add_offroad_transition_callback(self._offroad_transition)
 
+  # @atoms REQ-182 — Camera Offroad Transition Reconnection
   def _offroad_transition(self):
     # Reconnect if not first time going onroad
     if ui_state.is_onroad() and self.frame is not None:

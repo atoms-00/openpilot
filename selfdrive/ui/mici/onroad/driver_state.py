@@ -15,6 +15,7 @@ LOOKING_CENTER_THRESHOLD_UPPER = math.radians(6)
 LOOKING_CENTER_THRESHOLD_LOWER = math.radians(3)
 
 
+# @atoms REQ-186 — DMoji Driver State Widget
 class DriverStateRenderer(Widget):
   BASE_SIZE = 60
   LINES_ANGLE_INCREMENT = 5
@@ -66,6 +67,7 @@ class DriverStateRenderer(Widget):
   def set_should_draw(self, should_draw: bool):
     self._should_draw = should_draw
 
+  # @atoms REQ-145 — DMoji Visibility Gate
   @property
   def should_draw(self):
     return (self._should_draw and ui_state.sm["selfdriveState"].alertSize == AlertSize.none and
@@ -150,6 +152,7 @@ class DriverStateRenderer(Widget):
     start_y = center_y + (line_offset + line_length) * math.sin(math.radians(angle))
     end_x = start_x + line_length * math.cos(math.radians(angle))
     end_y = start_y + line_length * math.sin(math.radians(angle))
+    # @atoms REQ-149 — DMoji Indicator Color Palette
     color = rl.Color(0, 255, 64, 255)
 
     if grey:
@@ -182,6 +185,7 @@ class DriverStateRenderer(Widget):
     pitch = self._pitch_filter.update(pitch)
     yaw = self._yaw_filter.update(yaw)
 
+    # @atoms REQ-148 — DMoji Looking-Center Hysteresis
     # hysteresis on looking center
     if abs(pitch) < LOOKING_CENTER_THRESHOLD_LOWER and abs(yaw) < LOOKING_CENTER_THRESHOLD_LOWER:
       self._looking_center = True
@@ -206,11 +210,13 @@ class DriverStateRenderer(Widget):
       rl.draw_circle(int(roll_x), 140, 5, rl.GREEN)
 
     # filter head rotation, handling wrap-around
+    # @atoms REQ-147 — DMoji Head Orientation Rotation
     rotation = math.degrees(math.atan2(pitch, yaw))
     angle_diff = rotation - self._rotation_filter.x
     angle_diff = ((angle_diff + 180) % 360) - 180
     self._rotation_filter.update(self._rotation_filter.x + angle_diff)
 
+    # @atoms REQ-146 — DMoji Fade Opacity Levels
     if not self.should_draw:
       self._fade_filter.update(0.0)
     elif not self.effective_active:

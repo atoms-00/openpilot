@@ -31,12 +31,14 @@ class BookmarkState(IntEnum):
   DRAGGING = 1
   TRIGGERED = 2
 
+# @atoms REQ-165 — Camera Stream Hysteresis Selection
 WIDE_CAM_MAX_SPEED = 5.0  # m/s (10 mph)
 ROAD_CAM_MIN_SPEED = 10  # m/s (25 mph)
 
 CAM_Y_OFFSET = 20
 
 
+# @atoms REQ-171 — Bookmark Swipe Gesture State Machine
 class BookmarkIcon(Widget):
   PEEK_THRESHOLD = 50  # If icon peeks out this much, snap it fully visible
   FULL_VISIBLE_OFFSET = 200  # How far onscreen when fully visible
@@ -129,6 +131,7 @@ class BookmarkIcon(Widget):
       rl.draw_texture_ex(self._icon, rl.Vector2(icon_x, icon_y), 0.0, 1.0, rl.WHITE)
 
 
+# @atoms REQ-190 — Augmented Road View Composer
 class AugmentedRoadView(CameraView):
   def __init__(self, bookmark_callback=None, stream_type: VisionStreamType = VisionStreamType.VISION_STREAM_ROAD):
     super().__init__("camerad", stream_type)
@@ -189,6 +192,7 @@ class AugmentedRoadView(CameraView):
     # Update calibration before rendering
     self._update_calibration()
 
+    # @atoms REQ-166 — Onroad Content Rect Side Panel Reservation
     # Create inner content area with border padding
     self._content_rect = rl.Rectangle(
       self.rect.x,
@@ -206,6 +210,7 @@ class AugmentedRoadView(CameraView):
       int(self._content_rect.height)
     )
 
+    # @atoms REQ-167 — Onroad Render Composition Order
     # Render the base camera view
     super()._render(self._content_rect)
 
@@ -217,6 +222,7 @@ class AugmentedRoadView(CameraView):
 
     alert_to_render, not_animating_out = self._alert_renderer.will_render()
 
+    # @atoms REQ-168 — DMoji Visibility Coordination Policy
     # Hide DMoji when disengaged unless AlwaysOnDM is enabled
     should_draw_dmoji = (not self._hud_renderer.drawing_top_icons() and ui_state.is_onroad() and
                          (ui_state.status != UIStatus.DISENGAGED or ui_state.always_on_dm))
@@ -232,6 +238,7 @@ class AugmentedRoadView(CameraView):
       self._alert_renderer.render(self._content_rect)
     self._hud_renderer.render(self._content_rect)
 
+    # @atoms REQ-104 — Engagement Border Color
     # Draw fake rounded border
     rl.draw_rectangle_rounded_lines_ex(self._content_rect, 0.2 * 1.02, 10, 50, rl.BLACK)
 
@@ -244,16 +251,19 @@ class AugmentedRoadView(CameraView):
 
     self._bookmark_icon.render(self.rect)
 
+    # @atoms REQ-169 — Offroad Darkening Overlay
     # Draw darkened background and text if not onroad
     if not ui_state.started:
       rl.draw_rectangle(int(self.rect.x), int(self.rect.y), int(self.rect.width), int(self.rect.height), rl.Color(0, 0, 0, 175))
       self._offroad_label.render(self._rect)
 
+    # @atoms REQ-172 — Onroad Draw Time Telemetry
     # publish uiDebug
     msg = messaging.new_message('uiDebug')
     msg.uiDebug.drawTimeMillis = (time.monotonic() - start_draw) * 1000
     self._pm.send('uiDebug', msg)
 
+  # @atoms REQ-165 — Camera Stream Hysteresis Selection
   def _switch_stream_if_needed(self, sm):
     if sm['selfdriveState'].experimentalMode and WIDE_CAM in self.available_streams:
       v_ego = sm['carState'].vEgo
@@ -270,6 +280,7 @@ class AugmentedRoadView(CameraView):
     if self.stream_type != target:
       self.switch_stream(target)
 
+  # @atoms REQ-170 — Live Calibration Matrix Update
   def _update_calibration(self):
     # Update device camera if not already set
     sm = ui_state.sm

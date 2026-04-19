@@ -16,6 +16,7 @@ EventName = log.OnroadEvent.EventName
 EVENT_TO_INT = EventName.schema.enumerants
 
 
+# @atoms REQ-183 — Driver Camera Preview Magnification
 class DriverCameraView(CameraView):
   def _calc_frame_matrix(self, rect: rl.Rectangle):
     base = super()._calc_frame_matrix(rect)
@@ -25,6 +26,7 @@ class DriverCameraView(CameraView):
     return base
 
 
+# @atoms REQ-192 — Driver Camera Dialog
 class BaseDriverCameraDialog(Widget):
   # Not a NavWidget so training guide can use this without back navigation
   def __init__(self):
@@ -42,6 +44,7 @@ class BaseDriverCameraDialog(Widget):
 
     self._load_eye_textures()
 
+  # @atoms REQ-184 — Driver Camera Preview Lifecycle
   def show_event(self):
     super().show_event()
     ui_state.params.put_bool("IsDriverViewEnabled", True)

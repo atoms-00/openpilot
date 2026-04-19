@@ -21,16 +21,19 @@ ALERT_MARGIN = 18
 ALERT_FONT_SMALL = 66 - 50
 ALERT_FONT_BIG = 88 - 40
 
+# @atoms REQ-160 — Selfdrive State Timeout Alerts
 SELFDRIVE_STATE_TIMEOUT = 5  # Seconds
 SELFDRIVE_UNRESPONSIVE_TIMEOUT = 10  # Seconds
 
 # Constants
+# @atoms REQ-107 — Alert Severity Colors
 ALERT_COLORS = {
   AlertStatus.normal: rl.Color(0, 0, 0, 255),
   AlertStatus.userPrompt: rl.Color(255, 115, 0, 255),
   AlertStatus.critical: rl.Color(255, 0, 21, 255),
 }
 
+# @atoms REQ-162 — Turn Signal Icon Blink Cadence
 TURN_SIGNAL_BLINK_PERIOD = 1 / (80 / 60)  # Mazda heartbeat turn signal BPM
 
 DEBUG = False
@@ -86,6 +89,7 @@ ALERT_CRITICAL_REBOOT = Alert(
 )
 
 
+# @atoms REQ-189 — Alert Renderer
 class AlertRenderer(Widget):
   def __init__(self):
     super().__init__()
@@ -121,6 +125,7 @@ class AlertRenderer(Widget):
     ss = sm['selfdriveState']
 
     # Check if selfdriveState messages have stopped arriving
+    # @atoms REQ-160 — Selfdrive State Timeout Alerts
     if not sm.updated['selfdriveState']:
       recv_frame = sm.recv_frame['selfdriveState']
       time_since_onroad = time.monotonic() - ui_state.started_time
@@ -152,6 +157,7 @@ class AlertRenderer(Widget):
     alert = self.get_alert(ui_state.sm)
     return alert or self._prev_alert, alert is None
 
+  # @atoms REQ-161 — Lane Change Alert Icon Selection
   def _icon_helper(self, alert: Alert) -> AlertLayout:
     icon_side = None
     txt_icon = None
@@ -219,6 +225,7 @@ class AlertRenderer(Widget):
     alert = self.get_alert(ui_state.sm)
 
     # Animate fade and slide in/out
+    # @atoms REQ-159 — Alert Slide-In Animation
     self._alert_y_filter.update(self._rect.y - 50 if alert is None else self._rect.y)
     self._alpha_filter.update(0 if alert is None else 1)
 
@@ -242,6 +249,7 @@ class AlertRenderer(Widget):
     if alert_layout.icon is None:
       return
 
+    # @atoms REQ-162 — Turn Signal Icon Blink Cadence
     if time.monotonic() - self._turn_signal_timer > TURN_SIGNAL_BLINK_PERIOD:
       self._turn_signal_timer = time.monotonic()
       self._turn_signal_alpha_filter.x = 255 * 2
@@ -261,6 +269,7 @@ class AlertRenderer(Widget):
     rl.draw_texture_ex(alert_layout.icon.texture, rl.Vector2(pos_x, self._rect.y + alert_layout.icon.margin_y), 0.0, 1.0,
                        rl.Color(255, 255, 255, int(icon_alpha * self._alpha_filter.x)))
 
+  # @atoms REQ-164 — Alert Background Gradient Sizing
   def _draw_background(self, alert: Alert) -> None:
     # draw top gradient for alert text at top
     color = ALERT_COLORS.get(alert.status, ALERT_COLORS[AlertStatus.normal])
@@ -297,6 +306,7 @@ class AlertRenderer(Widget):
     alert_text1 = alert.text1.lower().replace('calibrating: ', 'calibrating:\n')
     can_draw_second_line = False
     # TODO: there should be a common way to determine font size based on text length to maximize rect
+    # @atoms REQ-163 — Alert Text Length-Based Font Scaling
     if len(alert_text1) <= 12:
       can_draw_second_line = True
       font_size = 92 - 10

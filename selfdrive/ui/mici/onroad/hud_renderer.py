@@ -17,9 +17,11 @@ SET_SPEED_NA = 255
 KM_TO_MILE = 0.621371
 CRUISE_DISABLED_CHAR = '–'
 
+# @atoms REQ-155 — Set Speed Indicator Persistence
 SET_SPEED_PERSISTENCE = 2.5  # seconds
 
 
+# @atoms REQ-156 — Current Vehicle Speed Display
 @dataclass(frozen=True)
 class FontSizes:
   current_speed: int = 176
@@ -38,6 +40,7 @@ FONT_SIZES = FontSizes()
 COLORS = Colors()
 
 
+# @atoms REQ-154 — Turn Intent Arrow Animation
 class TurnIntent(Widget):
   FADE_IN_ANGLE = 30  # degrees
 
@@ -95,6 +98,7 @@ class TurnIntent(Widget):
       self._turn_intent_rotation_filter.update(0)
 
 
+# @atoms REQ-187 — HUD Renderer
 class HudRenderer(Widget):
   def __init__(self):
     super().__init__()
@@ -179,9 +183,11 @@ class HudRenderer(Widget):
 
     self._draw_steering_wheel(rect)
 
+  # @atoms REQ-157 — Steering Wheel Icon Animation
   def _draw_steering_wheel(self, rect: rl.Rectangle) -> None:
     wheel_txt = self._txt_wheel_critical if self._show_wheel_critical else self._txt_wheel
 
+    # @atoms REQ-158 — Wheel Critical State Indicator
     if self._show_wheel_critical:
       self._wheel_alpha_filter.update(255)
       self._wheel_y_filter.update(0)
@@ -221,6 +227,7 @@ class HudRenderer(Widget):
       exclamation_pos_y = pos_y - self._txt_exclamation_point.height / 2
       rl.draw_texture_ex(self._txt_exclamation_point, rl.Vector2(exclamation_pos_x, exclamation_pos_y), 0.0, 1.0, rl.WHITE)
 
+  # @atoms REQ-155 — Set Speed Indicator Persistence
   def _draw_set_speed(self, rect: rl.Rectangle) -> None:
     """Draw the MAX speed indicator box."""
     alpha = self._set_speed_alpha_filter.update(0 < rl.get_time() - self._set_speed_changed_time < SET_SPEED_PERSISTENCE and
@@ -263,6 +270,7 @@ class HudRenderer(Widget):
       max_color,
     )
 
+  # @atoms REQ-156 — Current Vehicle Speed Display
   def _draw_current_speed(self, rect: rl.Rectangle) -> None:
     """Draw the current vehicle speed and unit."""
     speed_text = str(round(self.speed))

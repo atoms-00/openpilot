@@ -21,7 +21,7 @@ def draw_circle_gradient(center_x: float, center_y: float, radius: int,
                20, rl.BLACK)
 
 
-# @atoms UI-013 — Confidence Ball
+# @atoms REQ-105 — Confidence Ball
 class ConfidenceBall(Widget):
   def __init__(self, demo: bool = False):
     super().__init__()
