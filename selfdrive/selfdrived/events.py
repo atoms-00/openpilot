@@ -22,7 +22,7 @@ AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 EventName = log.OnroadEvent.EventName
 
 
-# @atoms UI-021 — Alert Severity Colors (priority levels drive alert color mapping)
+# @atoms REQ-107 — Alert Severity Colors
 # Alert priorities
 class Priority(IntEnum):
   LOWEST = 0
@@ -110,7 +110,7 @@ class Events:
     return ret
 
 
-# @atoms UI-021 — Alert Severity Colors (alert_status and priority determine visual severity)
+# @atoms REQ-107 — Alert Severity Colors
 class Alert:
   def __init__(self,
                alert_text_1: str,
