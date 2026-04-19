@@ -6,6 +6,7 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.selfdrive.ui.onroad.cameraview import CameraView
 
 
+# @atoms REQ-344 — UI Application Lifecycle
 if __name__ == "__main__":
   gui_app.init_window("watch3")
   road = CameraView("camerad", VisionStreamType.VISION_STREAM_ROAD)

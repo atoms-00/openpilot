@@ -27,6 +27,7 @@ DESCRIPTIONS = {
 }
 
 
+# @atoms REQ-199 — Device Settings Layout
 class DeviceLayout(Widget):
   def __init__(self):
     super().__init__()

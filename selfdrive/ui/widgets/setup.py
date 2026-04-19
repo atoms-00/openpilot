@@ -11,6 +11,7 @@ from openpilot.system.ui.widgets.button import Button, ButtonStyle
 from openpilot.system.ui.widgets.label import Label
 
 
+# @atoms REQ-348 — Device Setup & Prime UI
 class SetupWidget(Widget):
   def __init__(self):
     super().__init__()
@@ -29,6 +30,7 @@ class SetupWidget(Widget):
     else:
       self._render_firehose_prompt(rect)
 
+  # @atoms REQ-368 — Setup Widget Pairing State Machine
   def _render_registration(self, rect: rl.Rectangle):
     """Render registration prompt."""
 
@@ -54,6 +56,7 @@ class SetupWidget(Widget):
     button_rect = rl.Rectangle(x, y + 30, w, 200)
     self._pair_device_btn.render(button_rect)
 
+  # @atoms REQ-368 — Setup Widget Pairing State Machine
   def _render_firehose_prompt(self, rect: rl.Rectangle):
     """Render firehose prompt widget."""
 

@@ -21,6 +21,7 @@ class UIStatus(Enum):
   OVERRIDE = "override"
 
 
+# @atoms REQ-344 — UI Application Lifecycle
 class UIState:
   _instance: 'UIState | None' = None
 
@@ -183,6 +184,7 @@ class UIState:
     self._param_update_time = time.monotonic()
 
 
+# @atoms REQ-355 — UI Offroad Brightness Defaults
 class Device:
   def __init__(self):
     self._ignition = False
@@ -233,6 +235,7 @@ class Device:
       brightness = BACKLIGHT_OFFROAD
     self._offroad_brightness = min(max(brightness, 0), 100)
 
+  # @atoms REQ-356 — UI Onroad Adaptive Brightness
   def _update_brightness(self):
     clipped_brightness = self._offroad_brightness
 
@@ -257,6 +260,7 @@ class Device:
         self._brightness_thread.start()
         self._last_brightness = brightness
 
+  # @atoms REQ-357 — UI Interactive Timeout
   def _update_wakefulness(self):
     # Handle interactive timeout
     ignition_just_turned_off = not ui_state.ignition and self._ignition

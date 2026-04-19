@@ -33,6 +33,7 @@ if HARDWARE.get_device_type() == "tizi":
 AudibleAlert = car.CarControl.HUDControl.AudibleAlert
 
 
+# @atoms REQ-358 — Audio Alert Sound Database
 sound_list: dict[int, tuple[str, int | None, float]] = {
   # AudibleAlert, file name, play count (none for infinite)
   AudibleAlert.engage: ("engage.wav", 1, MAX_VOLUME),
@@ -52,6 +53,7 @@ if HARDWARE.get_device_type() == "tizi":
     AudibleAlert.disengage: ("disengage_tizi.wav", 1, MAX_VOLUME),
   })
 
+# @atoms REQ-361 — Audio Alert SelfdriveState Timeout Alert
 def check_selfdrive_timeout_alert(sm):
   ss_missing = time.monotonic() - sm.recv_time['selfdriveState']
 
@@ -62,7 +64,7 @@ def check_selfdrive_timeout_alert(sm):
   return False
 
 
-# @atoms UI-022 — Audio Alerts
+# @atoms REQ-345 — Audio Alert Daemon
 class Soundd:
   def __init__(self):
     self.load_sounds()
@@ -139,6 +141,7 @@ class Soundd:
       self.update_alert(AudibleAlert.none)
       self.selfdrive_timeout_alert = False
 
+  # @atoms REQ-359 — Audio Alert Ambient Volume Adaptation
   def calculate_volume(self, weighted_db):
     volume = ((weighted_db - AMBIENT_DB) / DB_SCALE) * (MAX_VOLUME - MIN_VOLUME) + MIN_VOLUME
     return math.pow(VOLUME_BASE, (np.clip(volume, MIN_VOLUME, MAX_VOLUME) - 1))
@@ -170,6 +173,7 @@ class Soundd:
 
         self.get_audible_alert(sm)
 
+        # @atoms REQ-360 — Audio Alert Immediate Warning Ramp
         # Ramp up immediate warning sound over 4s
         if self.current_alert == AudibleAlert.warningImmediate:
           elapsed = time.monotonic() - self.ramp_start_time

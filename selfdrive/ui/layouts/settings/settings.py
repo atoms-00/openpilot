@@ -46,6 +46,7 @@ class PanelInfo:
   button_rect: rl.Rectangle = rl.Rectangle(0, 0, 0, 0)
 
 
+# @atoms REQ-197 — Settings Menu Layout
 class SettingsLayout(Widget):
   def __init__(self):
     super().__init__()

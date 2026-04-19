@@ -9,6 +9,7 @@ from openpilot.system.ui.lib.multilang import tr, tr_noop
 from openpilot.system.ui.lib.text_measure import measure_text_cached
 from openpilot.system.ui.widgets import Widget
 
+# @atoms REQ-349 — TICI Sidebar Layout
 SIDEBAR_WIDTH = 300
 METRIC_HEIGHT = 126
 METRIC_WIDTH = 240
@@ -62,6 +63,7 @@ class MetricData:
     self.color = color
 
 
+# @atoms REQ-349 — TICI Sidebar Layout
 class Sidebar(Widget):
   def __init__(self):
     super().__init__()
@@ -113,11 +115,13 @@ class Sidebar(Widget):
     self._update_connection_status(device_state)
     self._update_panda_status()
 
+  # @atoms REQ-371 — Sidebar Network Status
   def _update_network_status(self, device_state):
     self._net_type = NETWORK_TYPES.get(device_state.networkType.raw, tr_noop("Unknown"))
     strength = device_state.networkStrength
     self._net_strength = max(0, min(5, strength.raw + 1)) if strength.raw > 0 else 0
 
+  # @atoms REQ-372 — Sidebar Temperature Status
   def _update_temperature_status(self, device_state):
     thermal_status = device_state.thermalStatus
 
@@ -128,6 +132,7 @@ class Sidebar(Widget):
     else:
       self._temp_status.update(tr_noop("TEMP"), tr_noop("HIGH"), Colors.DANGER)
 
+  # @atoms REQ-373 — Sidebar Athena Connection Status
   def _update_connection_status(self, device_state):
     last_ping = device_state.lastAthenaPingTime
     if last_ping == 0:
@@ -137,6 +142,7 @@ class Sidebar(Widget):
     else:
       self._connect_status.update(tr_noop("CONNECT"), tr_noop("ERROR"), Colors.DANGER)
 
+  # @atoms REQ-374 — Sidebar Panda Status
   def _update_panda_status(self):
     if ui_state.panda_type == log.PandaState.PandaType.unknown:
       self._panda_status.update(tr_noop("NO"), tr_noop("PANDA"), Colors.DANGER)
@@ -170,6 +176,7 @@ class Sidebar(Widget):
     tint = Colors.BUTTON_PRESSED if (ui_state.started and flag_pressed) else Colors.BUTTON_NORMAL
     rl.draw_texture_ex(button_img, rl.Vector2(HOME_BTN.x, HOME_BTN.y), 0.0, 1.0, tint)
 
+    # @atoms REQ-375 — Sidebar Audio Recording Indicator
     # Microphone button
     if self._recording_audio:
       self._mic_indicator_rect = rl.Rectangle(rect.x + rect.width - 130, rect.y + 245, 75, 40)

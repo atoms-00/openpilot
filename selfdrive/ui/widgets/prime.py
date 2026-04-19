@@ -9,6 +9,7 @@ from openpilot.system.ui.widgets import Widget
 from openpilot.system.ui.widgets.label import gui_label
 
 
+# @atoms REQ-348 — Device Setup & Prime UI
 class PrimeWidget(Widget):
   """Widget for displaying comma prime subscription status"""
 
@@ -20,6 +21,7 @@ class PrimeWidget(Widget):
     else:
       self._render_for_non_prime_users(rect)
 
+  # @atoms REQ-369 — Prime Widget Branching
   def _render_for_non_prime_users(self, rect: rl.Rectangle):
     """Renders the advertisement for non-Prime users."""
 
@@ -50,6 +52,7 @@ class PrimeWidget(Widget):
       gui_label(rl.Rectangle(x, item_y, 100, 60), "✓", 50, color=rl.Color(70, 91, 234, 255))
       gui_label(rl.Rectangle(x + 60, item_y, w - 60, 60), feature, 50)
 
+  # @atoms REQ-369 — Prime Widget Branching
   def _render_for_prime_user(self, rect: rl.Rectangle):
     """Renders the prime user widget with subscription status."""
 

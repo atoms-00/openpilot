@@ -52,6 +52,7 @@ class ButtonStyle(IntEnum):
   DARK = 1
 
 
+# @atoms REQ-195 — Mici Offroad Alerts Layout
 class ActionButton(Widget):
   def __init__(self, text: str | Callable[[], str], style: ButtonStyle = ButtonStyle.LIGHT,
                min_width: int = AlertConstants.MIN_BUTTON_WIDTH):

@@ -5,6 +5,7 @@ from openpilot.system.ui.lib.multilang import tr
 from openpilot.system.ui.widgets import Widget
 
 
+# @atoms REQ-198 — Settings Toggles Layout
 class ExperimentalModeButton(Widget):
   def __init__(self):
     super().__init__()

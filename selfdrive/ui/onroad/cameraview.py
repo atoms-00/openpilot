@@ -65,6 +65,7 @@ else:
     """
 
 
+# @atoms REQ-191 — Camera View Pipeline
 class CameraView(Widget):
   def __init__(self, name: str, stream_type: VisionStreamType):
     super().__init__()

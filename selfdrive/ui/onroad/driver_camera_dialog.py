@@ -9,6 +9,7 @@ from openpilot.system.ui.lib.multilang import tr
 from openpilot.system.ui.widgets.label import gui_label
 
 
+# @atoms REQ-192 — Driver Camera Dialog
 class DriverCameraDialog(CameraView):
   def __init__(self):
     super().__init__("camerad", VisionStreamType.VISION_STREAM_DRIVER)

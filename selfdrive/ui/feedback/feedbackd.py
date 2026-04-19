@@ -5,10 +5,12 @@ from openpilot.common.swaglog import cloudlog
 from cereal import car
 from openpilot.system.micd import SAMPLE_RATE, SAMPLE_BUFFER
 
+# @atoms REQ-362 — User Feedback Bookmark Capture
 FEEDBACK_MAX_DURATION = 10.0
 ButtonType = car.CarState.ButtonEvent.Type
 
 
+# @atoms REQ-346 — User Feedback Capture
 def main():
   params = Params()
   pm = messaging.PubMaster(['userBookmark', 'audioFeedback'])

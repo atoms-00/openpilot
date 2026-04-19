@@ -6,6 +6,7 @@ from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.widgets import Widget
 
 
+# @atoms REQ-198 — Settings Toggles Layout
 class ExpButton(Widget):
   def __init__(self, button_size: int, icon_size: int):
     super().__init__()

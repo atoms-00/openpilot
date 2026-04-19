@@ -170,6 +170,7 @@ class DeclinePage(Widget):
     self._text.render(text_rect)
 
 
+# @atoms REQ-196 — Mici Onboarding Flow
 class OnboardingWindow(Widget):
   def __init__(self):
     super().__init__()

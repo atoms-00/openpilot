@@ -16,6 +16,8 @@ def main():
   config_realtime_process(0, 51)
 
   gui_app.init_window("UI")
+  # @atoms REQ-344 — UI Application Lifecycle
+  # @atoms REQ-353 — UI Device-Type Layout Selection
   if BIG_UI:
     MainLayout()
   else:
@@ -27,6 +29,7 @@ def main():
       # reaffine after power save offlines our core
       if TICI and os.sched_getaffinity(0) != cores:
         try:
+          # @atoms REQ-354 — UI Realtime Core Affinity
           set_core_affinity(list(cores))
         except OSError:
           pass

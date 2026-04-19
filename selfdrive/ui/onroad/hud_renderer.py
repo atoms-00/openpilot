@@ -56,6 +56,7 @@ FONT_SIZES = FontSizes()
 COLORS = Colors()
 
 
+# @atoms REQ-187 — HUD Renderer
 class HudRenderer(Widget):
   def __init__(self):
     super().__init__()

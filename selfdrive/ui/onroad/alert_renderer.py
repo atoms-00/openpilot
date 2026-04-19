@@ -69,6 +69,7 @@ ALERT_CRITICAL_REBOOT = Alert(
 )
 
 
+# @atoms REQ-189 — Alert Renderer
 class AlertRenderer(Widget):
   def __init__(self):
     super().__init__()

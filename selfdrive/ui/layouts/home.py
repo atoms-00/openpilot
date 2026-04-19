@@ -27,6 +27,7 @@ class HomeLayoutState(IntEnum):
   ALERTS = 2
 
 
+# @atoms REQ-351 — TICI Home Layout
 class HomeLayout(Widget):
   def __init__(self):
     super().__init__()
@@ -214,6 +215,7 @@ class HomeLayout(Widget):
     alert_count = self.offroad_alert.refresh()
     alerts_present = alert_count > 0
 
+    # @atoms REQ-379 — TICI Home State Switching
     # Show panels on transition from no alert/update to any alerts/update
     if not update_available and not alerts_present:
       self._set_state(HomeLayoutState.HOME)

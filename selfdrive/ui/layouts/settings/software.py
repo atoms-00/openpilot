@@ -48,6 +48,7 @@ def time_ago(date: datetime.datetime | None) -> str:
   return date.strftime("%a %b %d %Y")
 
 
+# @atoms REQ-350 — TICI Software Update Layout
 class SoftwareLayout(Widget):
   def __init__(self):
     super().__init__()
@@ -66,6 +67,7 @@ class SoftwareLayout(Widget):
 
     # Branch switcher
     self._branch_btn = button_item(lambda: tr("Target Branch"), lambda: tr("SELECT"), callback=self._on_select_branch)
+    # @atoms REQ-377 — Software Branch Selector Tested-Branch Gate
     self._branch_btn.set_visible(not ui_state.params.get_bool("IsTestedBranch"))
     self._branch_btn.action_item.set_value(ui_state.params.get("UpdaterTargetBranch") or "")
     self._branch_dialog: MultiOptionDialog | None = None
@@ -104,6 +106,7 @@ class SoftwareLayout(Widget):
     fetch_available = ui_state.params.get_bool("UpdaterFetchAvailable")
     update_available = ui_state.params.get_bool("UpdateAvailable")
 
+    # @atoms REQ-376 — Software Update State Machine
     if updater_state != "idle":
       # Updater responded
       self._waiting_for_updater = False

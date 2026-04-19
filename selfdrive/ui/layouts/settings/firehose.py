@@ -24,6 +24,7 @@ INSTRUCTIONS = tr_noop(
 )
 
 
+# @atoms REQ-201 — Firehose Settings Layout
 class FirehoseLayout(FirehoseLayoutBase):
   def __init__(self):
     super().__init__()

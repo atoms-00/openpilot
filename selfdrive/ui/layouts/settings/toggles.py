@@ -34,6 +34,7 @@ DESCRIPTIONS = {
 }
 
 
+# @atoms REQ-198 — Settings Toggles Layout
 class TogglesLayout(Widget):
   def __init__(self):
     super().__init__()

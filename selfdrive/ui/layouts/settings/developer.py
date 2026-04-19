@@ -28,6 +28,7 @@ DESCRIPTIONS = {
 }
 
 
+# @atoms REQ-200 — Developer Settings Layout
 class DeveloperLayout(Widget):
   def __init__(self):
     super().__init__()

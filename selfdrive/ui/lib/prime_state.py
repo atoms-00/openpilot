@@ -11,6 +11,7 @@ from openpilot.system.athena.registration import UNREGISTERED_DONGLE_ID
 from openpilot.selfdrive.ui.lib.api_helpers import get_token
 
 
+# @atoms REQ-365 — PrimeState Type Classification
 class PrimeType(IntEnum):
   UNKNOWN = -2
   UNPAIRED = -1
@@ -22,6 +23,7 @@ class PrimeType(IntEnum):
   PURPLE = 5
 
 
+# @atoms REQ-347 — Comma Connect Integration
 class PrimeState:
   FETCH_INTERVAL = 5.0  # seconds between API calls
   API_TIMEOUT = 10.0  # seconds for API requests
@@ -68,6 +70,7 @@ class PrimeState:
         self._params.put("PrimeType", int(prime_type))
         cloudlog.info(f"Prime type updated to {prime_type}")
 
+  # @atoms REQ-364 — PrimeState Background Polling
   def _worker_thread(self) -> None:
     from openpilot.selfdrive.ui.ui_state import ui_state, device
     while self._running:

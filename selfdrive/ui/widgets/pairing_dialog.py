@@ -15,9 +15,11 @@ from openpilot.system.ui.widgets.button import IconButton
 from openpilot.selfdrive.ui.ui_state import ui_state
 
 
+# @atoms REQ-348 — Device Setup & Prime UI
 class PairingDialog(Widget):
   """Dialog for device pairing with QR code."""
 
+  # @atoms REQ-367 — Pairing QR Refresh
   QR_REFRESH_INTERVAL = 300  # 5 minutes in seconds
 
   def __init__(self):
@@ -28,6 +30,7 @@ class PairingDialog(Widget):
     self._close_btn = IconButton(gui_app.texture("icons/close.png", 80, 80))
     self._close_btn.set_click_callback(gui_app.pop_widget)
 
+  # @atoms REQ-366 — Pairing URL Generation
   def _get_pairing_url(self) -> str:
     try:
       dongle_id = self.params.get("DongleId") or ""
@@ -37,6 +40,7 @@ class PairingDialog(Widget):
       token = ""
     return f"https://connect.comma.ai/?pair={token}"
 
+  # @atoms REQ-367 — Pairing QR Refresh
   def _generate_qr_code(self) -> None:
     try:
       qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)

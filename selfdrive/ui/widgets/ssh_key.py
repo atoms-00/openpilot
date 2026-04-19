@@ -24,7 +24,9 @@ from openpilot.system.ui.widgets.list_view import (
 VALUE_FONT_SIZE = 48
 
 
+# @atoms REQ-370 — SSH Key Fetch State Machine
 class SshKeyFetcher:
+  # @atoms REQ-370 — SSH Key Fetch State Machine
   HTTP_TIMEOUT = 15  # seconds
 
   def __init__(self, params: Params):
@@ -75,6 +77,7 @@ class SshKeyActionState(Enum):
   REMOVE = tr_noop("REMOVE")
 
 
+# @atoms REQ-348 — Device Setup & Prime UI
 class SshKeyAction(ItemAction):
   MAX_WIDTH = 500
 

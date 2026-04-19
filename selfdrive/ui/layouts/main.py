@@ -17,6 +17,7 @@ class MainState(IntEnum):
   ONROAD = 2
 
 
+# @atoms REQ-352 — TICI Main Layout
 class MainLayout(Widget):
   def __init__(self):
     super().__init__()
@@ -69,6 +70,7 @@ class MainLayout(Widget):
 
       self._set_mode_for_state()
 
+  # @atoms REQ-380 — TICI Main Sidebar Visibility
   def _set_mode_for_state(self):
     if ui_state.started:
       # Don't hide sidebar from interactive timeout

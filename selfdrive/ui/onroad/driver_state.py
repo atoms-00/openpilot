@@ -46,6 +46,7 @@ class ArcData:
   thickness: float
 
 
+# @atoms REQ-186 — DMoji Driver State Widget
 class DriverStateRenderer(Widget):
   def __init__(self):
     super().__init__()
