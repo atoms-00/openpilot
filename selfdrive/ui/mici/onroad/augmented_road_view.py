@@ -238,9 +238,15 @@ class AugmentedRoadView(CameraView):
       self._alert_renderer.render(self._content_rect)
     self._hud_renderer.render(self._content_rect)
 
-    # @atoms REQ-104 — Engagement Border Color
-    # Draw fake rounded border
-    rl.draw_rectangle_rounded_lines_ex(self._content_rect, 0.2 * 1.02, 10, 50, rl.BLACK)
+    # @atoms REQ-104 REQ-408 REQ-409
+    # Engagement border: 8 px solid green along four edges of the onroad content rect.
+    # Rendered only in the engaged state. Contained within the content rect so it
+    # does not overlap the side panel (REQ-166), set-speed indicator, or current
+    # speed text.
+    if ui_state.status == UIStatus.ENGAGED:
+      BORDER_PX = 8  # @atoms border_px
+      GREEN = rl.Color(0, 255, 64, 255)  # matches lane_line_color_engaged
+      rl.draw_rectangle_lines_ex(self._content_rect, BORDER_PX, GREEN)
 
     # End clipping region
     rl.end_scissor_mode()
