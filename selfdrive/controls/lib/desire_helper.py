@@ -1,5 +1,6 @@
 from cereal import log
 from openpilot.common.constants import CV
+from openpilot.common.params import Params  # @atoms REQ-142
 from openpilot.common.realtime import DT_MDL
 
 LaneChangeState = log.LaneChangeState
@@ -40,12 +41,24 @@ class DesireHelper:
     self.keep_pulse_timer = 0.0
     self.prev_one_blinker = False
     self.desire = log.Desire.none
+    self.params = Params()  # @atoms REQ-142
 
   @staticmethod
   def get_lane_change_direction(CS):
     return LaneChangeDirection.left if CS.leftBlinker else LaneChangeDirection.right
 
   def update(self, carstate, lateral_active, lane_change_prob):
+    # @atoms REQ-142
+    # Auto Lane Change user toggle gate. When the user has set AutoLaneChange to
+    # False (REQ-140), hold lane_change_state at off regardless of inputs. The
+    # param default is "1" / True (REQ-143), so existing users see no change.
+    if not self.params.get_bool("AutoLaneChange"):
+      self.lane_change_state = LaneChangeState.off
+      self.lane_change_direction = LaneChangeDirection.none
+      self.lane_change_timer = 0.0  # @atoms REQ-142
+      self.prev_one_blinker = carstate.leftBlinker or carstate.rightBlinker
+      return  # @atoms REQ-142
+
     v_ego = carstate.vEgo
     one_blinker = carstate.leftBlinker != carstate.rightBlinker
     below_lane_change_speed = v_ego < LANE_CHANGE_SPEED_MIN

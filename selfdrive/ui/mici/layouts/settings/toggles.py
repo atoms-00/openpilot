@@ -20,6 +20,11 @@ class TogglesLayoutMici(NavScroller):
     self._experimental_btn = BigParamControl("experimental mode", "ExperimentalMode")
     is_metric_toggle = BigParamControl("use metric units", "IsMetric")
     ldw_toggle = BigParamControl("lane departure warnings", "IsLdwEnabled")
+    # @atoms REQ-140 REQ-141 REQ-143
+    # User-facing Auto Lane Change toggle. Reads/writes the AutoLaneChange param
+    # (registered PERSISTENT in params_keys.h, default "1"). When disabled, the
+    # lane change state machine is held at off (see desire_helper.py @atoms REQ-142).
+    auto_lane_change_toggle = BigParamControl("auto lane change", "AutoLaneChange")
     always_on_dm_toggle = BigParamControl("always-on driver monitor", "AlwaysOnDM")
     # @atoms REQ-236 — Recording Toggle Restart-Required Callback
     # @atoms REQ-234 — Record Front Engagement Gate
@@ -34,6 +39,7 @@ class TogglesLayoutMici(NavScroller):
       self._experimental_btn,
       is_metric_toggle,
       ldw_toggle,
+      auto_lane_change_toggle,  # @atoms REQ-140
       always_on_dm_toggle,
       record_front,
       record_mic,
@@ -45,6 +51,7 @@ class TogglesLayoutMici(NavScroller):
       ("ExperimentalMode", self._experimental_btn),
       ("IsMetric", is_metric_toggle),
       ("IsLdwEnabled", ldw_toggle),
+      ("AutoLaneChange", auto_lane_change_toggle),  # @atoms REQ-140
       ("AlwaysOnDM", always_on_dm_toggle),
       ("RecordFront", record_front),
       ("RecordAudio", record_mic),

@@ -15,6 +15,10 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"AthenadPid", {PERSISTENT, INT}},
     {"AthenadUploadQueue", {PERSISTENT, JSON}},
     {"AthenadRecentlyViewedRoutes", {PERSISTENT, STRING}},
+    // @atoms REQ-141 REQ-143
+    // Auto Lane Change user toggle. PERSISTENT scope (REQ-141); default "1" applied
+    // on first boot via manager.py's get_default_value loop (REQ-143).
+    {"AutoLaneChange", {PERSISTENT, BOOL, "1"}},
     {"BootCount", {PERSISTENT, INT}},
     {"CalibrationParams", {PERSISTENT, BYTES}},
     {"CameraDebugExpGain", {CLEAR_ON_MANAGER_START, STRING}},
